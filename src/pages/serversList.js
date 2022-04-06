@@ -20,6 +20,7 @@ const ServersListPage = ({
   const [currency, setCurrency] = useState("USD");
   const [sumToPay, setSumToPay] = useState("server.sumToPay");
   const [page, setPage] = useState(1);
+  const [nextServers, setNextServers] = useState();
 
   useEffect(() => {
     setCreated(false);
@@ -27,13 +28,12 @@ const ServersListPage = ({
   const getServers = async () => {
     try {
       const allServers = await axios.get(
-        // "http://localhost:8080/servers",
-
         "https://server-app-server.herokuapp.com/servers",
         { params: { page: page } }
         // { signal: abortController.signal }
       );
       setServers(allServers.data.servers);
+      setNextServers(allServers.data.next);
     } catch (error) {
       if (error.name === "AbortError") return;
       throw error;
@@ -153,11 +153,13 @@ const ServersListPage = ({
 
   const handleNextPage = () => {
     setPage(page + 1);
-    getServers();
+    getServers(page + 1);
   };
+
   const handlePreviousPage = () => {
     if (page > 1) {
       setPage(page - 1);
+      getServers();
     }
   };
 
@@ -218,6 +220,7 @@ const ServersListPage = ({
         page={page}
         handlePreviousPage={handlePreviousPage}
         handleNextPage={handleNextPage}
+        nextServers={nextServers}
       />
     </div>
   );
