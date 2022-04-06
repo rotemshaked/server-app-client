@@ -20,7 +20,7 @@ const ServersListPage = ({
   const [currency, setCurrency] = useState("USD");
   const [sumToPay, setSumToPay] = useState("server.sumToPay");
   const [page, setPage] = useState(1);
-  const [nextServers, setNextServers] = useState();
+  const [nextServers, setNextServers] = useState([]);
 
   useEffect(() => {
     setCreated(false);
