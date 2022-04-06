@@ -25,12 +25,14 @@ const ServersListPage = ({
   useEffect(() => {
     setCreated(false);
   }, []);
+
   const getServers = async () => {
+    const abortController = new AbortController();
     try {
       const allServers = await axios.get(
         "https://server-app-server.herokuapp.com/servers",
-        { params: { page: page } }
-        // { signal: abortController.signal }
+        { params: { page: page } },
+        { signal: abortController.signal }
       );
       setServers(allServers.data.servers);
       setNextServers(allServers.data.next);
@@ -38,15 +40,14 @@ const ServersListPage = ({
       if (error.name === "AbortError") return;
       throw error;
     }
+    return () => {
+      console.log("abort servers");
+      abortController.abort();
+    };
   };
-  useEffect(() => {
-    // const abortController = new AbortController();
 
+  useEffect(() => {
     getServers();
-    // return () => {
-    //   console.log("abort servers");
-    //   abortController.abort();
-    // };
   }, [created, running, page]);
 
   useEffect(() => {
