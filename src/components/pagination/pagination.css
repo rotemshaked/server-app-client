@@ -1,0 +1,32 @@
+.pagination {
+  /* background-color: #dacbb3; */
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+}
+.previous-btn,
+.next-btn {
+  cursor: pointer;
+  margin: 0rem 2rem;
+  padding: 0.8rem;
+  border: none;
+  width: auto;
+  display: flex;
+}
+.previous-btn:hover,
+.next-btn:hover {
+  background-color: #c08e2b;
+  color: white;
+}
+.hidden-btn {
+  display: none;
+}
+
+.page {
+  display: flex;
+  font-size: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  color: whitesmoke;
+  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+}
