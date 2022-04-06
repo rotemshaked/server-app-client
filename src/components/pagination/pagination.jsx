@@ -21,7 +21,7 @@ const Pagination = ({
       <div className="page"> - {page} -</div>
       <button
         onClick={handleNextPage}
-        className={nextServers.length ? "next-btn" : "hidden-btn"}
+        className={nextServers ? "next-btn" : "hidden-btn"}
       >
         Next &nbsp;
         <FontAwesomeIcon icon={faArrowRight} />
