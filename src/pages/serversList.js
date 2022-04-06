@@ -20,7 +20,7 @@ const ServersListPage = ({
   const [currency, setCurrency] = useState("USD");
   const [sumToPay, setSumToPay] = useState("server.sumToPay");
   const [page, setPage] = useState(1);
-  const [nextServers, setNextServers] = useState([]);
+  const [nextServers, setNextServers] = useState();
 
   useEffect(() => {
     setCreated(false);
@@ -36,6 +36,7 @@ const ServersListPage = ({
       );
       setServers(allServers.data.servers);
       setNextServers(allServers.data.next);
+      console.log(allServers.data.next);
     } catch (error) {
       if (error.name === "AbortError") return;
       throw error;
