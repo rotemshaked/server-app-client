@@ -19,10 +19,7 @@ const Pagination = ({
         &nbsp; Previous
       </button>
       <div className="page"> - {page} -</div>
-      <button
-        onClick={handleNextPage}
-        className={nextServers ? "next-btn" : "hidden-btn"}
-      >
+      <button onClick={handleNextPage} className="next-btn">
         Next &nbsp;
         <FontAwesomeIcon icon={faArrowRight} />
       </button>
