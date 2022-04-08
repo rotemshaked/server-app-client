@@ -64,35 +64,34 @@ const CreateServer = ({ types, servers, created, setCreated }) => {
     <div className="create-server-page">
       <div className="create-page-container">
         <h1 className="title">Create A Server</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="form">
           <label>
-            Name:
+            Name :
             <input
               className="name-input"
               type="text"
               name="name"
-              placeholder="Name"
+              // placeholder="Name"
               onChange={handleChange}
               required
             />
           </label>
           <label>
-            IP address:
+            IP address :
             <input
               className="address-input"
               type="text"
               name="address"
-              placeholder="IP address"
+              // placeholder="IP address"
               onChange={handleChange}
               required
             />
           </label>
           <label>
-            Choose type:
+            Choose type :
             <select
               id="type"
               name="type"
-              placeholder="type"
               className="select"
               value={newServer.typeId}
               onChange={handleChange}
@@ -111,7 +110,7 @@ const CreateServer = ({ types, servers, created, setCreated }) => {
           </label>
           <input
             type="submit"
-            value="Create a server"
+            value="CREATE A SERVER"
             className="submit-Button"
           />
           {error && <div className="error">❌ An Error occurred</div>}

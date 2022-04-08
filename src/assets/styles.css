@@ -1,61 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap");
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: "Hammersmith One", sans-serif;
 }
-
+.home-page-div {
+  background-color: #272727;
+}
 .home-page {
-  background: url("./home.jpg");
+  /* clip-path: circle(60%); */
+  background: linear-gradient(to right, #f0e2d7bb, rgba(168, 42, 218, 0.65)),
+    url("./pexels-panumas-nikhomkhai-1148820.jpg");
   height: 95vh;
   background-size: cover;
   background-repeat: no-repeat, repeat;
   background-position: center;
   position: relative;
-  color: #c9a458;
+  color: white;
 }
+
 .first-sentence {
   position: absolute;
-  margin-left: 10%;
+  margin-left: 27%;
   margin-top: 10%;
   font-size: 4rem;
 }
 .second-sentence {
   position: absolute;
-  margin-left: 10.5%;
-  margin-top: 17%;
+  margin-left: 33%;
+  margin-top: 15%;
   font-size: 2rem;
 }
 .button-1 {
   position: absolute;
-  margin-left: 10.5%;
-  margin-top: 22%;
+  margin-left: 44%;
+  margin-top: 19%;
   font-size: 1.5rem;
-  padding: 1rem;
-  background-color: #c9a458;
-  color: white;
+  height: 3rem;
+  width: 15rem;
+  background-color: #272727;
+  color: rgba(255, 255, 255, 0.983);
   border: none;
   cursor: pointer;
-  border-radius: 20px;
+  border-radius: 5px;
+  font-weight: bold;
 }
 .button-1:hover {
-  background-color: #c08e2b;
+  background-color: #414040;
+  color: white;
 }
-
 .servers-List-Page {
-  background: url("./create-server.jpg");
+  /* background: url("./create-server.jpg"); */
+  background: linear-gradient(to right, #f0e2d7bb, rgba(168, 42, 218, 0.65)),
+    url("./pexels-manuel-geissinger-325229.jpg");
+
   min-height: 95vh;
   background-size: cover;
   background-repeat: no-repeat, repeat;
   background-position: center;
   position: relative;
-  color: #c9a458;
+  /* display: flex;
+  justify-content: center;
+  flex-direction: column; */
+  align-items: center;
+}
+.serversContiner {
+  width: 100%;
   display: flex;
   justify-content: center;
+  margin-top: 2%;
+  /* border: #c08e2b 2px solid; */
 }
 .servers {
-  display: flex;
-  flex-wrap: wrap;
+  /* display: flex;
+  flex-wrap: wrap; */
+  /* align-items: center;
+  justify-content: center; */
 }
+.servers-table {
+  width: 60vw;
+  background-color: #595959;
+  height: 3rem;
+  /* border: 1px solid white; */
+}
+.servers-table th {
+  /* border-right: 1px solid white; */
+  padding: 1rem;
+  border-right: 1px solid;
+
+  /* font-size: 1.2rem;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #272727;
+  color: white;
+  margin-left: 5px;
+  width: auto; */
+}
+
 .pick-currency {
   margin-top: 1rem;
   color: black;
@@ -65,9 +109,12 @@
   flex-direction: column;
   justify-content: center;
 }
-.serversContiner {
-  width: 93%;
-}
+/* .serversContiner {
+  width: 100%;
+  display: flex;
+  margin-top: 10%;
+  border: #c08e2b 2px solid;
+} */
 .currency {
   border: none;
   width: 5rem;
@@ -76,16 +123,18 @@
   margin-top: 0.5rem;
 }
 .create-server-page {
-  background: url("./server.jpg");
+  background: linear-gradient(to right, #b6afa9bb, rgba(168, 42, 218, 0.65)),
+    url("./server.jpg");
   min-height: 95vh;
   background-size: cover;
   background-repeat: no-repeat, repeat;
   background-position: center;
+  color: white;
   position: relative;
 }
 .create-page-container {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.226);
   width: 100vw;
   height: 80vh;
   margin-top: 7vh;
@@ -93,8 +142,8 @@
 form {
   display: flex;
   flex-direction: column;
-  margin-left: 4rem;
-  margin-top: 8rem;
+  margin-left: 4.5rem;
+  margin-top: 11rem;
   height: 80%;
   width: 30%;
 }
@@ -102,66 +151,68 @@ form {
   position: absolute;
   margin-top: 5rem;
   margin-left: 5rem;
+  font-size: 3.5rem;
 }
+
 label {
   display: flex;
   justify-content: space-between;
-  font-weight: bold;
-  font-size: 1rem;
   margin: 0.7rem;
+  font-size: 1.3rem;
 }
 label,
 input {
   padding: 0.3rem;
   border: none;
   outline: none;
-  font-size: 16px;
 }
 .address-input,
 .name-input {
+  font-size: 1.2rem;
   align-self: flex-end;
   width: 15rem;
+  color: black;
 }
 .select {
+  font-size: 1.2rem;
   padding: 0.3rem;
   outline: none;
   border: none;
   width: 15rem;
 }
 .submit-Button {
-  width: 40%;
+  min-width: 12rem;
+  height: 2.5rem;
   align-self: center;
   cursor: pointer;
-  padding: 0.7rem;
   font-weight: 400;
-  background-color: #c08e2bc9;
+  background-color: #414040;
   border: 2px solid transparent;
-  color: aliceblue;
+  color: white;
+  font-size: 1.2rem;
   margin-top: 1rem;
 }
 .submit-Button:hover {
-  background-color: #c08e2b;
+  border: 2px solid white;
 }
-.error {
-  border: 3px solid red;
-  color: white;
-  font-weight: bold;
-  background-color: #c08e2b;
-  height: auto;
-  text-align: center;
-  width: 12rem;
-  margin-left: 30%;
-  margin-top: 2rem;
-}
+.error,
 .created {
   color: white;
   font-weight: bold;
-  background-color: rgba(172, 255, 47, 0.692);
   height: auto;
   text-align: center;
+  align-self: center;
   width: 12rem;
-  margin-left: 30%;
   margin-top: 2rem;
+  font-size: 1.2rem;
+}
+.created {
+  background-color: rgba(172, 255, 47, 0.857);
+  border: 3px solid rgba(172, 255, 47, 0.857);
+}
+.error {
+  background-color: red;
+  border: 3px solid red;
 }
 .load {
   font-weight: bold;

@@ -3,6 +3,8 @@ import axios from "axios";
 import Server from "../components/server/server";
 import Loader from "../components/loader/loader";
 import Pagination from "../components/pagination/pagination";
+import Search from "../components/search/serach";
+
 import "../assets/styles.css";
 
 const ServersListPage = ({
@@ -147,7 +149,6 @@ const ServersListPage = ({
       let currentCurrency = e.target.value;
       setCurrency(currentCurrency);
       setSumToPay(conversionRates[currentCurrency]);
-      console.log(conversionRates[currentCurrency]);
     } catch (err) {
       console.log(err);
     }
@@ -170,6 +171,7 @@ const ServersListPage = ({
   return (
     <div>
       <div className="servers-List-Page">
+        <Search servers={servers} />
         <div className="serversContiner">
           {!servers.length > 0 || !(types.length > 0) || !currency ? (
             <div className="load">
@@ -178,12 +180,24 @@ const ServersListPage = ({
             </div>
           ) : (
             <div className="servers">
-              {servers.map((server) => {
-                let typeId = types.find((type) => {
-                  return type._id === server.type;
-                });
-                return (
-                  <div key={server._id}>
+              <table className="servers-table">
+                <tr>
+                  <th>Name</th>
+                  <th>IP ahhress</th>
+                  <th>Type</th>
+                  <th>Price per minute</th>
+                  <th>Server is running</th>
+                  <th>Sum to pay</th>
+                  <th>Start</th>
+                  <th>Stop</th>
+                  <th>Delete</th>
+                  <th>Pick currency</th>
+                </tr>
+                {servers.map((server) => {
+                  let typeId = types.find((type) => {
+                    return type._id === server.type;
+                  });
+                  return (
                     <Server
                       server={server}
                       types={typeId}
@@ -195,27 +209,28 @@ const ServersListPage = ({
                       currency={currency}
                       sumToPay={sumToPay}
                       setSumToPay={setSumToPay}
+                      running={running}
                     />
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </table>
             </div>
           )}
-        </div>
-        <div className="pick-currency">
-          Pick Currency &nbsp;
-          <select
-            onChange={(e) => handleSelectedCurrency(e)}
-            className="currency"
-          >
-            {currencies.map((currency) => {
-              return (
-                <option key={currency} value={currency}>
-                  {currency}
-                </option>
-              );
-            })}
-          </select>
+          {/* <div className="pick-currency">
+            Pick Currency &nbsp;
+            <select
+              onChange={(e) => handleSelectedCurrency(e)}
+              className="currency"
+            >
+              {currencies.map((currency) => {
+                return (
+                  <option key={currency} value={currency}>
+                    {currency}
+                  </option>
+                );
+              })}
+            </select>
+          </div> */}
         </div>
       </div>
       <Pagination
