@@ -5,9 +5,9 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles.css";
 import { useEffect } from "react";
 
-const Home = ({ setOnServersPage }) => {
+const Home = ({ setShowChangeCurrency }) => {
   useEffect(() => {
-    setOnServersPage(false);
+    setShowChangeCurrency(false);
   }, []);
   return (
     <div className="home-page-div">

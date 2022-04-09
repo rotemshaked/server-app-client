@@ -4,7 +4,6 @@
   height: 3rem;
   text-indent: 0.5rem;
 }
-
 .server {
   height: 28rem;
   width: 20rem;
@@ -37,18 +36,11 @@
 }
 .button-2 {
   cursor: pointer;
-  /* margin-left: 0.9rem;
-  margin-top: 0.5rem;
-  padding: 0.3rem;
-  border-radius: 0.5rem;
+  background-color: transparent;
   border: none;
-  width: 80%;
-  background-color: #272727;
-  color: white;
-  font-size: 1.2rem; */
+  font-size: large;
 }
 .button-2:hover {
-  background-color: #414040;
   color: white;
 }
 .icon-2 {
@@ -56,6 +48,16 @@
   /* margin-top: 5rem; */
   margin-left: 1rem;
   color: rgb(47, 255, 61);
+}
+.icon-3 {
+  margin-left: 1rem;
+  color: black;
+}
+.icon-3:hover {
+  color: rgb(47, 255, 61);
+}
+.icon-4:hover {
+  color: red;
 }
 .off {
   color: red;

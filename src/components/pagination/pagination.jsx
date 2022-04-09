@@ -3,12 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-const Pagination = ({
-  page,
-  handlePreviousPage,
-  handleNextPage,
-  nextServers,
-}) => {
+const Pagination = ({ page, handlePreviousPage, handleNextPage, nextPage }) => {
   return (
     <div className="pagination">
       <button
@@ -21,7 +16,7 @@ const Pagination = ({
       <div className="page"> - Page {page} -</div>
       <button
         onClick={handleNextPage}
-        className={nextServers.length > 0 ? "next-btn" : "hidden-btn"}
+        className={nextPage.length > 0 ? "next-btn" : "hidden-btn"}
       >
         Next &nbsp;
         <FontAwesomeIcon icon={faArrowRight} />

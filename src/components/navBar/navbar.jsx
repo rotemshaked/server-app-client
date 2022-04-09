@@ -6,11 +6,8 @@ import "./navbar.css";
 const NavBar = ({
   conversionRates,
   setConversionRates,
-  sumToPay,
-  setSumToPay,
-  currency,
   setCurrency,
-  onServersPage,
+  showChangeCurrency,
 }) => {
   useEffect(() => {
     const abortController = new AbortController();
@@ -20,7 +17,9 @@ const NavBar = ({
           "https://v6.exchangerate-api.com/v6/0e4c0b6173479f83c9344560/latest/USD",
           { signal: abortController.signal }
         )
-        .then((data) => setConversionRates(data.data.conversion_rates));
+        .then((data) => {
+          setConversionRates(data.data.conversion_rates);
+        });
     } catch (error) {
       if (error.name === "AbortError") return;
       throw error;
@@ -34,9 +33,7 @@ const NavBar = ({
   const handleSelectedCurrency = async (e) => {
     try {
       let currentCurrency = e.target.value;
-      // console.log("currency. ", currentCurrency);
       setCurrency(currentCurrency);
-      setSumToPay(conversionRates[currentCurrency]);
     } catch (err) {
       console.log(err);
     }
@@ -55,7 +52,7 @@ const NavBar = ({
       <Link className="create-server" to="/create">
         Create Server
       </Link>
-      {onServersPage && (
+      {showChangeCurrency && (
         <div className="pick-currency">
           <div className="pick-currency-div">Pick Currency &nbsp;</div>
           <div>

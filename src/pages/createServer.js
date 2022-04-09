@@ -3,11 +3,10 @@ import axios from "axios";
 import "./../assets/styles.css";
 
 const CreateServer = ({
-  types,
-  servers,
-  created,
-  setCreated,
-  setOnServersPage,
+  updatedServersList,
+  setUpdatedServersList,
+  serversTypes,
+  setShowChangeCurrency,
 }) => {
   const [newServer, setNewServer] = useState({
     name: " ",
@@ -18,13 +17,13 @@ const CreateServer = ({
 
   useEffect(() => {
     setError(false);
-    setCreated(false);
-    setOnServersPage(false);
+    setUpdatedServersList(false);
+    setShowChangeCurrency(false);
   }, []);
 
   const handleChange = (e) => {
     setError(false);
-    setCreated(false);
+    setUpdatedServersList(false);
     switch (e.target.name) {
       case "name":
         setNewServer((prev) => ({ ...prev, name: e.target.value }));
@@ -43,12 +42,9 @@ const CreateServer = ({
   const createServer = async () => {
     try {
       await axios
-        // .post("http://localhost:8080/create", newServer)
         .post("https://server-app-server.herokuapp.com/create", newServer)
         .then(() => {
-          const newListOfservers = [...servers, newServer];
-          console.log(newListOfservers);
-          setCreated(true);
+          setUpdatedServersList(true);
         })
         .catch((error) => {
           console.log("error 1");
@@ -63,7 +59,7 @@ const CreateServer = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(false);
-    setCreated(false);
+    setUpdatedServersList(false);
     createServer();
   };
 
@@ -78,7 +74,6 @@ const CreateServer = ({
               className="name-input"
               type="text"
               name="name"
-              // placeholder="Name"
               onChange={handleChange}
               required
             />
@@ -89,7 +84,6 @@ const CreateServer = ({
               className="address-input"
               type="text"
               name="address"
-              // placeholder="IP address"
               onChange={handleChange}
               required
             />
@@ -104,7 +98,7 @@ const CreateServer = ({
               onChange={handleChange}
             >
               <option></option>
-              {types.map((option) => {
+              {serversTypes.map((option) => {
                 return (
                   <option value={option._id} key={option._id}>
                     {`${option.name.toUpperCase()} - ${
@@ -121,7 +115,9 @@ const CreateServer = ({
             className="submit-Button"
           />
           {error && <div className="error">❌ An Error occurred</div>}
-          {created && <div className="created">✅ Server created!</div>}
+          {updatedServersList && (
+            <div className="created">✅ Server created!</div>
+          )}
         </form>
       </div>
     </div>

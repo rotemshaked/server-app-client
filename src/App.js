@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NavBar from "./components/navBar/navbar";
 import Home from "./pages/home";
@@ -8,48 +7,43 @@ import CreateServer from "./pages/createServer";
 import "./assets/styles.css";
 
 function App() {
-  const [servers, setServers] = useState([]);
-  const [types, setTypes] = useState([]);
-  const [conversionRates, setConversionRates] = useState(false);
-  const [created, setCreated] = useState(false);
-  const [running, setRunning] = useState(false);
+  const [serversList, setServersList] = useState([]);
+  const [serversTypes, setServersTypes] = useState([]);
+  const [conversionRates, setConversionRates] = useState([]);
+  const [updatedServersList, setUpdatedServersList] = useState(false);
+  const [runningServer, setRunningServer] = useState(false);
   const [currency, setCurrency] = useState("USD");
-  const [sumToPay, setSumToPay] = useState("server.sumToPay");
-  const [onServersPage, setOnServersPage] = useState("false");
+  const [showChangeCurrency, setShowChangeCurrency] = useState("false");
 
   return (
     <BrowserRouter>
       <NavBar
         conversionRates={conversionRates}
         setConversionRates={setConversionRates}
-        currency={currency}
         setCurrency={setCurrency}
-        sumToPay={sumToPay}
-        setSumToPay={setSumToPay}
-        onServersPage={onServersPage}
-        setOnServersPage={setOnServersPage}
+        showChangeCurrency={showChangeCurrency}
       />
       <Routes>
         <Route
           path="/"
-          element={<Home setOnServersPage={setOnServersPage} />}
+          element={<Home setShowChangeCurrency={setShowChangeCurrency} />}
         />
         <Route
           path="/servers"
           element={
             <ServersListPage
-              types={types}
-              setTypes={setTypes}
-              servers={servers}
-              setServers={setServers}
-              running={running}
-              setRunning={setRunning}
-              created={created}
-              setCreated={setCreated}
+              serversList={serversList}
+              setServersList={setServersList}
+              serversTypes={serversTypes}
+              setServersTypes={setServersTypes}
+              updatedServersList={updatedServersList}
+              setUpdatedServersList={setUpdatedServersList}
+              runningServer={runningServer}
+              setRunningServer={setRunningServer}
               conversionRates={conversionRates}
+              currency={currency}
               setConversionRates={setConversionRates}
-              onServersPage={onServersPage}
-              setOnServersPage={setOnServersPage}
+              setShowChangeCurrency={setShowChangeCurrency}
             />
           }
         />
@@ -57,12 +51,12 @@ function App() {
           path="/create"
           element={
             <CreateServer
-              types={types}
-              servers={servers}
-              setRunning={setRunning}
-              created={created}
-              setCreated={setCreated}
-              setOnServersPage={setOnServersPage}
+              serversTypes={serversTypes}
+              serversList={serversList}
+              updatedServersList={updatedServersList}
+              setUpdatedServersList={setUpdatedServersList}
+              setRunningServer={setRunningServer}
+              setShowChangeCurrency={setShowChangeCurrency}
             />
           }
         />

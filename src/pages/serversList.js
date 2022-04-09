@@ -8,33 +8,22 @@ import Search from "../components/search/serach";
 import "../assets/styles.css";
 
 const ServersListPage = ({
-  running,
-  setRunning,
-  servers,
-  types,
-  setTypes,
-  created,
-  setCreated,
+  serversList,
+  setServersList,
+  serversTypes,
+  setServersTypes,
+  updatedServersList,
+  setUpdatedServersList,
+  runningServer,
+  setRunningServer,
   conversionRates,
-  setConversionRates,
-  setServers,
-  sumToPay,
-  setSumToPay,
   currency,
-  setCurrency,
-  setOnServersPage,
+  setShowChangeCurrency,
 }) => {
-  // const [currency, setCurrency] = useState("USD");
-  // const [sumToPay, setSumToPay] = useState("server.sumToPay");
   const [page, setPage] = useState(1);
-  const [nextServers, setNextServers] = useState([]);
+  const [nextPage, setNextPage] = useState([]);
 
-  useEffect(() => {
-    setCreated(false);
-    setOnServersPage(true);
-  }, []);
-  console.log("cuuuu", currency);
-  const getServers = async () => {
+  const getServers = async (page) => {
     const abortController = new AbortController();
     try {
       const allServers = await axios.get(
@@ -42,9 +31,8 @@ const ServersListPage = ({
         { params: { page: page } },
         { signal: abortController.signal }
       );
-      setServers(allServers.data.servers);
-      setNextServers(allServers.data.next);
-      console.log(allServers.data.next);
+      setServersList(allServers.data.servers);
+      setNextPage(allServers.data.next);
     } catch (error) {
       if (error.name === "AbortError") return;
       throw error;
@@ -56,19 +44,20 @@ const ServersListPage = ({
   };
 
   useEffect(() => {
-    getServers();
-  }, [created, running, page, currency]);
+    getServers(page);
+    setUpdatedServersList(false);
+    setShowChangeCurrency(true);
+  }, [updatedServersList, runningServer, page, currency]);
 
   useEffect(() => {
     const abortController = new AbortController();
     const getTypes = async () => {
       try {
         const allTypes = await axios.get(
-          // "http://localhost:8080/types",
           "https://server-app-server.herokuapp.com/types",
           { signal: abortController.signal }
         );
-        setTypes(allTypes.data);
+        setServersTypes(allTypes.data);
       } catch (error) {
         if (error.name === "AbortError") return;
         throw error;
@@ -81,34 +70,14 @@ const ServersListPage = ({
     };
   }, []);
 
-  // useEffect(() => {
-  //   const abortController = new AbortController();
-  //   try {
-  //     axios
-  //       .get(
-  //         "https://v6.exchangerate-api.com/v6/0e4c0b6173479f83c9344560/latest/USD",
-  //         { signal: abortController.signal }
-  //       )
-  //       .then((data) => setConversionRates(data.data.conversion_rates));
-  //   } catch (error) {
-  //     if (error.name === "AbortError") return;
-  //     throw error;
-  //   }
-  //   return () => {
-  //     console.log("abort conversion rates");
-  //     abortController.abort();
-  //   };
-  // }, []);
-
   const handleDelete = async (server) => {
     try {
       axios
-        // .delete("http://localhost:8080/servers", {
         .delete("https://server-app-server.herokuapp.com/servers", {
           data: { _id: server._id },
         })
         .then(() => {
-          setCreated(true);
+          setUpdatedServersList(true);
         })
         .catch((error) => {
           console.log(error);
@@ -119,15 +88,13 @@ const ServersListPage = ({
   };
 
   const handleStart = async (server) => {
-    setRunning(false);
+    setRunningServer(false);
     try {
       if (!server.isRunning) {
-        // await axios.put("http://localhost:8080/servers", {
         await axios.put("https://server-app-server.herokuapp.com/servers", {
           _id: server._id,
         });
-        setRunning(true);
-        console.log(server);
+        setRunningServer(true);
       }
     } catch (err) {
       console.log(err);
@@ -135,30 +102,18 @@ const ServersListPage = ({
   };
 
   const handleStop = async (server) => {
-    setRunning(true);
+    setRunningServer(true);
     try {
       if (server.isRunning) {
         await axios.put("https://server-app-server.herokuapp.com/servers", {
-          // await axios.put("http://localhost:8080/servers", {
           _id: server._id,
         });
-        setRunning(false);
-        console.log(server);
+        setRunningServer(false);
       }
     } catch (err) {
       console.log(err);
     }
   };
-
-  // const handleSelectedCurrency = async (e) => {
-  //   try {
-  //     let currentCurrency = e.target.value;
-  //     setCurrency(currentCurrency);
-  //     setSumToPay(conversionRates[currentCurrency]);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   const handleNextPage = () => {
     setPage(page + 1);
@@ -171,13 +126,13 @@ const ServersListPage = ({
       getServers();
     }
   };
-  console.log(servers);
+
   return (
     <div>
       <div className="servers-List-Page">
-        <Search servers={servers} />
+        <Search serversList={serversList} />
         <div className="serversContiner">
-          {!servers.length > 0 || !(types.length > 0) ? (
+          {!serversList.length > 0 || !(serversTypes.length > 0) ? (
             <div className="load">
               Loading...
               <Loader />
@@ -196,22 +151,19 @@ const ServersListPage = ({
                   <th>Stop</th>
                   <th>Delete</th>
                 </tr>
-                {servers.map((server) => {
-                  let typeId = types.find((type) => {
+                {serversList.map((server) => {
+                  let typeId = serversTypes.find((type) => {
                     return type._id === server.type;
                   });
                   return (
                     <Server
                       server={server}
-                      types={typeId}
+                      serverType={typeId}
+                      conversionRates={conversionRates}
+                      currency={currency}
                       handleDelete={handleDelete}
                       handleStop={handleStop}
                       handleStart={handleStart}
-                      conversionRates={conversionRates}
-                      currency={currency}
-                      sumToPay={sumToPay}
-                      setSumToPay={setSumToPay}
-                      running={running}
                     />
                   );
                 })}
@@ -223,7 +175,7 @@ const ServersListPage = ({
           page={page}
           handlePreviousPage={handlePreviousPage}
           handleNextPage={handleNextPage}
-          nextServers={nextServers}
+          nextPage={nextPage}
         />
       </div>
     </div>
