@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./../assets/styles.css";
 
-const CreateServer = ({ types, servers, created, setCreated }) => {
+const CreateServer = ({
+  types,
+  servers,
+  created,
+  setCreated,
+  setOnServersPage,
+}) => {
   const [newServer, setNewServer] = useState({
     name: " ",
     ipAddress: " ",
@@ -13,6 +19,7 @@ const CreateServer = ({ types, servers, created, setCreated }) => {
   useEffect(() => {
     setError(false);
     setCreated(false);
+    setOnServersPage(false);
   }, []);
 
   const handleChange = (e) => {

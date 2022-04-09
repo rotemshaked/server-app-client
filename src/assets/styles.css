@@ -20,7 +20,6 @@
   position: relative;
   color: white;
 }
-
 .first-sentence {
   position: absolute;
   margin-left: 27%;
@@ -52,18 +51,16 @@
   color: white;
 }
 .servers-List-Page {
-  /* background: url("./create-server.jpg"); */
   background: linear-gradient(to right, #f0e2d7bb, rgba(168, 42, 218, 0.65)),
     url("./pexels-manuel-geissinger-325229.jpg");
-
   min-height: 95vh;
   background-size: cover;
   background-repeat: no-repeat, repeat;
   background-position: center;
   position: relative;
-  /* display: flex;
-  justify-content: center;
-  flex-direction: column; */
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: column;
   align-items: center;
 }
 .serversContiner {
@@ -80,15 +77,19 @@
   justify-content: center; */
 }
 .servers-table {
-  width: 60vw;
-  background-color: #595959;
+  width: 75vw;
+  /* background-color: white; */
   height: 3rem;
   /* border: 1px solid white; */
 }
 .servers-table th {
+  background-color: #9e9d9db0;
+
   /* border-right: 1px solid white; */
   padding: 1rem;
-  border-right: 1px solid;
+  /* border-right: 1px solid; */
+  color: #414040;
+  font-size: 1.5rem;
 
   /* font-size: 1.2rem;
   padding-top: 12px;
@@ -100,7 +101,7 @@
   width: auto; */
 }
 
-.pick-currency {
+/* .pick-currency {
   margin-top: 1rem;
   color: black;
   font-weight: bold;
@@ -108,20 +109,20 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
+} */
 /* .serversContiner {
   width: 100%;
   display: flex;
   margin-top: 10%;
   border: #c08e2b 2px solid;
 } */
-.currency {
+/* .currency {
   border: none;
   width: 5rem;
   height: 1.5rem;
   outline: none;
   margin-top: 0.5rem;
-}
+} */
 .create-server-page {
   background: linear-gradient(to right, #b6afa9bb, rgba(168, 42, 218, 0.65)),
     url("./server.jpg");

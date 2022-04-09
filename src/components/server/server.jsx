@@ -12,6 +12,7 @@ const Server = ({
   currency,
   running,
 }) => {
+  console.log(conversionRates[currency], "ooooo", currency);
   return (
     <tr key={server._id} className="tr-servers">
       <td>{server.name}</td>
@@ -32,6 +33,9 @@ const Server = ({
         <button className="button-2" onClick={() => handleStart(server)}>
           ▶
         </button>
+        {server.isRunning && (
+          <FontAwesomeIcon icon={faDatabase} className="icon-2" />
+        )}
       </td>
       <td>
         <button className="button-2" onClick={() => handleStop(server)}>

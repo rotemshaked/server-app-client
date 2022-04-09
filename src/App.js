@@ -13,12 +13,27 @@ function App() {
   const [conversionRates, setConversionRates] = useState(false);
   const [created, setCreated] = useState(false);
   const [running, setRunning] = useState(false);
+  const [currency, setCurrency] = useState("USD");
+  const [sumToPay, setSumToPay] = useState("server.sumToPay");
+  const [onServersPage, setOnServersPage] = useState("false");
 
   return (
     <BrowserRouter>
-      <NavBar />
+      <NavBar
+        conversionRates={conversionRates}
+        setConversionRates={setConversionRates}
+        currency={currency}
+        setCurrency={setCurrency}
+        sumToPay={sumToPay}
+        setSumToPay={setSumToPay}
+        onServersPage={onServersPage}
+        setOnServersPage={setOnServersPage}
+      />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={<Home setOnServersPage={setOnServersPage} />}
+        />
         <Route
           path="/servers"
           element={
@@ -33,6 +48,8 @@ function App() {
               setCreated={setCreated}
               conversionRates={conversionRates}
               setConversionRates={setConversionRates}
+              onServersPage={onServersPage}
+              setOnServersPage={setOnServersPage}
             />
           }
         />
@@ -45,6 +62,7 @@ function App() {
               setRunning={setRunning}
               created={created}
               setCreated={setCreated}
+              setOnServersPage={setOnServersPage}
             />
           }
         />

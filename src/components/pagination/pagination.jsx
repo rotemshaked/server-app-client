@@ -18,7 +18,7 @@ const Pagination = ({
         <FontAwesomeIcon icon={faArrowLeft} />
         &nbsp; Previous
       </button>
-      <div className="page"> - {page} -</div>
+      <div className="page"> - Page {page} -</div>
       <button
         onClick={handleNextPage}
         className={nextServers.length > 0 ? "next-btn" : "hidden-btn"}

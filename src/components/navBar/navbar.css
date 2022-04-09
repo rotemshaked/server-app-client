@@ -29,7 +29,26 @@
 .create-server:hover {
   border: 2px solid whitesmoke;
 }
+.pick-currency {
+  display: flex;
+  justify-content: end;
+  align-items: flex-end;
+  width: 65%;
+  color: aliceblue;
+  /* border: 2px solid red; */
+}
 
+.pick-currency-div {
+  color: aliceblue;
+  font-size: large;
+}
+.currency {
+  border: none;
+  width: 5rem;
+  height: 1.5rem;
+  outline: none;
+  /* margin-top: 0.5rem; */
+}
 @media screen and (max-width: 600px) {
   .nav-bar {
     height: 4rem;

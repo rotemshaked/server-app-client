@@ -3,8 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 import "../assets/styles.css";
+import { useEffect } from "react";
 
-const Home = () => {
+const Home = ({ setOnServersPage }) => {
+  useEffect(() => {
+    setOnServersPage(false);
+  }, []);
   return (
     <div className="home-page-div">
       <div className="home-page">

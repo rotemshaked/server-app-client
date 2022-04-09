@@ -1,6 +1,8 @@
 .tr-servers td {
-  border: white;
-  background-color: antiquewhite;
+  border: rgba(255, 255, 255, 0.324);
+  background-color: rgba(255, 255, 255, 0.34);
+  height: 2rem;
+  text-indent: 0.5rem;
 }
 
 .server {
@@ -8,7 +10,7 @@
   width: 20rem;
   color: black;
   margin: 1rem;
-  background-color: rgba(255, 255, 255, 0.65);
+  background-color: white;
   display: flex;
   flex-direction: column;
   border-radius: 0.5rem;
@@ -50,8 +52,9 @@
   color: white;
 }
 .icon-2 {
-  font-size: 2.5rem;
-  margin-top: 5rem;
+  /* font-size: 2.5rem; */
+  /* margin-top: 5rem; */
+  margin-left: 1rem;
   color: rgb(47, 255, 61);
 }
 .off {

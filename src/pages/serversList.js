@@ -18,16 +18,22 @@ const ServersListPage = ({
   conversionRates,
   setConversionRates,
   setServers,
+  sumToPay,
+  setSumToPay,
+  currency,
+  setCurrency,
+  setOnServersPage,
 }) => {
-  const [currency, setCurrency] = useState("USD");
-  const [sumToPay, setSumToPay] = useState("server.sumToPay");
+  // const [currency, setCurrency] = useState("USD");
+  // const [sumToPay, setSumToPay] = useState("server.sumToPay");
   const [page, setPage] = useState(1);
   const [nextServers, setNextServers] = useState([]);
 
   useEffect(() => {
     setCreated(false);
+    setOnServersPage(true);
   }, []);
-
+  console.log("cuuuu", currency);
   const getServers = async () => {
     const abortController = new AbortController();
     try {
@@ -51,7 +57,7 @@ const ServersListPage = ({
 
   useEffect(() => {
     getServers();
-  }, [created, running, page]);
+  }, [created, running, page, currency]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -75,24 +81,24 @@ const ServersListPage = ({
     };
   }, []);
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    try {
-      axios
-        .get(
-          "https://v6.exchangerate-api.com/v6/0e4c0b6173479f83c9344560/latest/USD",
-          { signal: abortController.signal }
-        )
-        .then((data) => setConversionRates(data.data.conversion_rates));
-    } catch (error) {
-      if (error.name === "AbortError") return;
-      throw error;
-    }
-    return () => {
-      console.log("abort conversion rates");
-      abortController.abort();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const abortController = new AbortController();
+  //   try {
+  //     axios
+  //       .get(
+  //         "https://v6.exchangerate-api.com/v6/0e4c0b6173479f83c9344560/latest/USD",
+  //         { signal: abortController.signal }
+  //       )
+  //       .then((data) => setConversionRates(data.data.conversion_rates));
+  //   } catch (error) {
+  //     if (error.name === "AbortError") return;
+  //     throw error;
+  //   }
+  //   return () => {
+  //     console.log("abort conversion rates");
+  //     abortController.abort();
+  //   };
+  // }, []);
 
   const handleDelete = async (server) => {
     try {
@@ -144,15 +150,15 @@ const ServersListPage = ({
     }
   };
 
-  const handleSelectedCurrency = async (e) => {
-    try {
-      let currentCurrency = e.target.value;
-      setCurrency(currentCurrency);
-      setSumToPay(conversionRates[currentCurrency]);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleSelectedCurrency = async (e) => {
+  //   try {
+  //     let currentCurrency = e.target.value;
+  //     setCurrency(currentCurrency);
+  //     setSumToPay(conversionRates[currentCurrency]);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const handleNextPage = () => {
     setPage(page + 1);
@@ -165,15 +171,13 @@ const ServersListPage = ({
       getServers();
     }
   };
-
-  let currencies = Object.keys(conversionRates);
-
+  console.log(servers);
   return (
     <div>
       <div className="servers-List-Page">
         <Search servers={servers} />
         <div className="serversContiner">
-          {!servers.length > 0 || !(types.length > 0) || !currency ? (
+          {!servers.length > 0 || !(types.length > 0) ? (
             <div className="load">
               Loading...
               <Loader />
@@ -183,7 +187,7 @@ const ServersListPage = ({
               <table className="servers-table">
                 <tr>
                   <th>Name</th>
-                  <th>IP ahhress</th>
+                  <th>IP address</th>
                   <th>Type</th>
                   <th>Price per minute</th>
                   <th>Server is running</th>
@@ -191,7 +195,6 @@ const ServersListPage = ({
                   <th>Start</th>
                   <th>Stop</th>
                   <th>Delete</th>
-                  <th>Pick currency</th>
                 </tr>
                 {servers.map((server) => {
                   let typeId = types.find((type) => {
@@ -204,7 +207,6 @@ const ServersListPage = ({
                       handleDelete={handleDelete}
                       handleStop={handleStop}
                       handleStart={handleStart}
-                      handleSelectedCurrency={handleSelectedCurrency}
                       conversionRates={conversionRates}
                       currency={currency}
                       sumToPay={sumToPay}
@@ -216,29 +218,14 @@ const ServersListPage = ({
               </table>
             </div>
           )}
-          {/* <div className="pick-currency">
-            Pick Currency &nbsp;
-            <select
-              onChange={(e) => handleSelectedCurrency(e)}
-              className="currency"
-            >
-              {currencies.map((currency) => {
-                return (
-                  <option key={currency} value={currency}>
-                    {currency}
-                  </option>
-                );
-              })}
-            </select>
-          </div> */}
         </div>
+        <Pagination
+          page={page}
+          handlePreviousPage={handlePreviousPage}
+          handleNextPage={handleNextPage}
+          nextServers={nextServers}
+        />
       </div>
-      <Pagination
-        page={page}
-        handlePreviousPage={handlePreviousPage}
-        handleNextPage={handleNextPage}
-        nextServers={nextServers}
-      />
     </div>
   );
 };

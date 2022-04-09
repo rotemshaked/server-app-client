@@ -1,4 +1,4 @@
-/* .search-div {
+.search-div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,8 +21,12 @@
   border-bottom-right-radius: 1rem;
   height: 3rem;
   color: white;
-  background-color: #ded0c5;
+  background-color: #c910ea;
   border: none;
   font-size: large;
   cursor: pointer;
-} */
+}
+
+.search-btn:hover {
+  background-color: #c910eab4;
+}

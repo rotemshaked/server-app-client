@@ -33,11 +33,13 @@ const Search = ({ servers }) => {
   //   };
 
   const handleClick = (input) => {
-    console.log(servers); // const matchingServers = servers.filter((server) => {
-    //   console.log(server.name.toLowerCase());
-    //   return server.name.toLowerCase() === input.toLowerCase();
-    // });
-    // matchingServers.forEach((server) => {
+    const matchingServers = servers.filter((server) => {
+      // console.log(server.name.toLowerCase());
+      console.log(server.name === input);
+      return server.name === input;
+    });
+    console.log(matchingServers);
+    // return matchingServers.forEach((server) => {
     //   <div>{server.name}</div>;
     // });
   };
@@ -51,8 +53,8 @@ const Search = ({ servers }) => {
       ></input>
       <button
         className="search-btn"
-        onClick={(input) => {
-          handleClick();
+        onClick={() => {
+          handleClick(input);
         }}
       >
         <FontAwesomeIcon icon={faSearch} />
