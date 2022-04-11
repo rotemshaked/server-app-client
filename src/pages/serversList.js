@@ -4,7 +4,8 @@ import Server from "../components/server/server";
 import Loader from "../components/loader/loader";
 import Pagination from "../components/pagination/pagination";
 import Search from "../components/search/serach";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles.css";
 
 const ServersListPage = ({
@@ -147,9 +148,11 @@ const ServersListPage = ({
                   <th>Price per minute</th>
                   <th>Server is running</th>
                   <th>Sum to pay</th>
-                  <th>Start</th>
-                  <th>Stop</th>
-                  <th>Delete</th>
+                  <th> {<FontAwesomeIcon icon={faPlay} />}</th>
+                  <th>{<FontAwesomeIcon icon={faStop} />}</th>
+                  <th>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </th>
                 </tr>
                 {serversList.map((server) => {
                   let typeId = serversTypes.find((type) => {

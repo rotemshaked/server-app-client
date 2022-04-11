@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const Server = ({
   server,
@@ -30,7 +31,11 @@ const Server = ({
         2
       )} ${currency}`}</td>
       <td>
-        <button className="button-2" onClick={() => handleStart(server)}>
+        <button
+          className="button-2"
+          onClick={() => handleStart(server)}
+          title="Start"
+        >
           <FontAwesomeIcon icon={faPlay} className="icon-3" />
         </button>
         {server.isRunning && (
@@ -38,13 +43,21 @@ const Server = ({
         )}
       </td>
       <td>
-        <button className="button-2" onClick={() => handleStop(server)}>
+        <button
+          className="button-2"
+          onClick={() => handleStop(server)}
+          title="Stop"
+        >
           <FontAwesomeIcon icon={faStop} className="icon-4" />
         </button>
       </td>
       <td>
-        <button className="button-2" onClick={() => handleDelete(server)}>
-          Delete server
+        <button
+          className="button-2"
+          onClick={() => handleDelete(server)}
+          title="Delete"
+        >
+          <FontAwesomeIcon icon={faTrash} className="icon-2" />
         </button>
       </td>
     </tr>

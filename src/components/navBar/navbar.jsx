@@ -14,7 +14,7 @@ const NavBar = ({
     try {
       axios
         .get(
-          "https://v6.exchangerate-api.com/v6/0e4c0b6173479f83c9344560/latest/USD",
+          // "https://v6.exchangerate-api.com/v6/0e4c0b6173479f83c9344560/latest/USD",
           { signal: abortController.signal }
         )
         .then((data) => {

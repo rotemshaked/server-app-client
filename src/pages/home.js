@@ -1,14 +1,14 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-
 import "../assets/styles.css";
-import { useEffect } from "react";
 
 const Home = ({ setShowChangeCurrency }) => {
   useEffect(() => {
     setShowChangeCurrency(false);
   }, []);
+
   return (
     <div className="home-page-div">
       <div className="home-page">
