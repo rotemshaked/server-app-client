@@ -43,16 +43,6 @@
 .button-2:hover {
   color: white;
 }
-.icon-2 {
-  /* font-size: 2.5rem; */
-  /* margin-top: 5rem; */
-  margin-left: 1rem;
-  /* color: rgb(47, 255, 61); */
-}
-.icon-3 {
-  margin-left: 1rem;
-  color: black;
-}
 .icon-3:hover {
   color: rgb(47, 255, 61);
 }
