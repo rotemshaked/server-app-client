@@ -14,6 +14,7 @@ function App() {
   const [runningServer, setRunningServer] = useState(false);
   const [currency, setCurrency] = useState("USD");
   const [showChangeCurrency, setShowChangeCurrency] = useState("false");
+  const [input, setInput] = useState("");
 
   return (
     <BrowserRouter>
@@ -44,6 +45,8 @@ function App() {
               currency={currency}
               setConversionRates={setConversionRates}
               setShowChangeCurrency={setShowChangeCurrency}
+              input={input}
+              setInput={setInput}
             />
           }
         />

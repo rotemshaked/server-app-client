@@ -20,6 +20,8 @@ const ServersListPage = ({
   conversionRates,
   currency,
   setShowChangeCurrency,
+  input,
+  setInput,
 }) => {
   const [page, setPage] = useState(1);
   const [nextPage, setNextPage] = useState([]);
@@ -128,10 +130,43 @@ const ServersListPage = ({
     }
   };
 
+  const serversToShow = () => {
+    return serversList.map((server) => {
+      let typeId = serversTypes.find((type) => {
+        return type._id === server.type;
+      });
+      return (
+        <Server
+          key={server._id}
+          server={server}
+          serverType={typeId}
+          conversionRates={conversionRates}
+          currency={currency}
+          handleDelete={handleDelete}
+          handleStop={handleStop}
+          handleStart={handleStart}
+        />
+      );
+    });
+  };
+
+  const handleSearchClick = () => {
+    const listOfOptions = [];
+    serversList.filter((searchedServer) => {
+      let value = Object.values(searchedServer);
+      return value.filter((category) => {
+        return category === input ? listOfOptions.push(searchedServer) : "";
+      });
+    });
+    console.log(listOfOptions);
+    setServersList(listOfOptions);
+    return listOfOptions;
+  };
+
   return (
     <div>
       <div className="servers-List-Page">
-        <Search serversList={serversList} />
+        <Search setInput={setInput} handleSearchClick={handleSearchClick} />
         <div className="serversContiner">
           {!serversList.length > 0 || !(serversTypes.length > 0) ? (
             <div className="load">
@@ -141,35 +176,22 @@ const ServersListPage = ({
           ) : (
             <div className="servers">
               <table className="servers-table">
-                <tr>
-                  <th>Name</th>
-                  <th>IP address</th>
-                  <th>Type</th>
-                  <th>Price per minute</th>
-                  <th>Server is running</th>
-                  <th>Sum to pay</th>
-                  <th> {<FontAwesomeIcon icon={faPlay} />}</th>
-                  <th>{<FontAwesomeIcon icon={faStop} />}</th>
-                  <th>
-                    <FontAwesomeIcon icon={faTrash} />
-                  </th>
-                </tr>
-                {serversList.map((server) => {
-                  let typeId = serversTypes.find((type) => {
-                    return type._id === server.type;
-                  });
-                  return (
-                    <Server
-                      server={server}
-                      serverType={typeId}
-                      conversionRates={conversionRates}
-                      currency={currency}
-                      handleDelete={handleDelete}
-                      handleStop={handleStop}
-                      handleStart={handleStart}
-                    />
-                  );
-                })}
+                <tbody>
+                  <tr>
+                    <th>Name</th>
+                    <th>IP address</th>
+                    <th>Type</th>
+                    <th>Price per minute</th>
+                    <th>Server is running</th>
+                    <th>Sum to pay</th>
+                    <th> {<FontAwesomeIcon icon={faPlay} />}</th>
+                    <th>{<FontAwesomeIcon icon={faStop} />}</th>
+                    <th>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </th>
+                  </tr>
+                  {serversToShow()}
+                </tbody>
               </table>
             </div>
           )}
