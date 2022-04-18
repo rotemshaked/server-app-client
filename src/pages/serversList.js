@@ -130,7 +130,7 @@ const ServersListPage = ({
     }
   };
 
-  const serversToShow = () => {
+  const servers = () => {
     return serversList.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
@@ -158,9 +158,12 @@ const ServersListPage = ({
         return category === input ? listOfOptions.push(searchedServer) : "";
       });
     });
-    console.log(listOfOptions);
     setServersList(listOfOptions);
     return listOfOptions;
+  };
+
+  const serversToShow = () => {
+    return serversList.length > 0 ? servers() : handleSearchClick();
   };
 
   return (
