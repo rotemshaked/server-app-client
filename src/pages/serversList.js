@@ -135,18 +135,20 @@ const ServersListPage = ({
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
       });
-      return (
-        <Server
-          key={server._id}
-          server={server}
-          serverType={typeId}
-          conversionRates={conversionRates}
-          currency={currency}
-          handleDelete={handleDelete}
-          handleStop={handleStop}
-          handleStart={handleStart}
-        />
-      );
+      if (!server.deleted) {
+        return (
+          <Server
+            key={server._id}
+            server={server}
+            serverType={typeId}
+            conversionRates={conversionRates}
+            currency={currency}
+            handleDelete={handleDelete}
+            handleStop={handleStop}
+            handleStart={handleStart}
+          />
+        );
+      }
     });
   };
 
