@@ -3,9 +3,9 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import "./search.css";
 import { useState } from "react";
 
-const Search = ({ setInput, handleSearchClick }) => {
+const Search = ({ setInput, handleSearchClick, setSearchError }) => {
   const handleInput = (e) => {
-    console.log(e.target.value);
+    setSearchError(false);
     setInput(e.target.value);
   };
 
@@ -16,14 +16,14 @@ const Search = ({ setInput, handleSearchClick }) => {
         placeholder="Find server"
         onChange={handleInput}
       ></input>
-      <button
+      {/* <button
         className="search-btn"
         onClick={() => {
           handleSearchClick();
         }}
       >
         <FontAwesomeIcon icon={faSearch} />
-      </button>
+      </button> */}
     </div>
   );
 };

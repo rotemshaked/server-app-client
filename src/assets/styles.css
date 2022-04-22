@@ -83,23 +83,15 @@
 }
 .servers-table th {
   background-color: #9e9d9db0;
-
-  /* border-right: 1px solid white; */
   padding: 1rem;
-  /* border-right: 1px solid; */
   color: #414040;
   font-size: 1.5rem;
-
-  /* font-size: 1.2rem;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #272727;
-  color: white;
-  margin-left: 5px;
-  width: auto; */
 }
-
+.search-filter-container {
+  margin: 1rem 0rem 1rem 1rem;
+  display: flex;
+  width: 50%;
+}
 /* .pick-currency {
   margin-top: 1rem;
   color: black;
@@ -122,6 +114,12 @@
   outline: none;
   margin-top: 0.5rem;
 } */
+.error-message {
+  height: auto;
+  width: auto;
+  margin: 2rem;
+  background-color: red;
+}
 .create-server-page {
   background: linear-gradient(to right, #b6afa9bb, rgba(168, 42, 218, 0.65)),
     url("./server.jpg");
