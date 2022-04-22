@@ -1,6 +1,10 @@
-import "./SearchFilter.css";
+import "./SearchDropDown.css";
 
-const SearchFilter = ({ serversTypes, filterName, options, handleChange }) => {
+const SearchDropDown = ({ setSelectedSearch, filterName, options }) => {
+  const handleChange = (e) => {
+    setSelectedSearch(e.target.value);
+  };
+
   return (
     <div className="search-filter-div">
       <select
@@ -16,4 +20,4 @@ const SearchFilter = ({ serversTypes, filterName, options, handleChange }) => {
   );
 };
 
-export default SearchFilter;
+export default SearchDropDown;

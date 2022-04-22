@@ -15,6 +15,7 @@ function App() {
   const [currency, setCurrency] = useState("USD");
   const [showChangeCurrency, setShowChangeCurrency] = useState("false");
   const [input, setInput] = useState("");
+  const [selectedSearch, setSelectedSearch] = useState([]);
 
   return (
     <BrowserRouter>
@@ -47,6 +48,8 @@ function App() {
               setShowChangeCurrency={setShowChangeCurrency}
               input={input}
               setInput={setInput}
+              setSelectedSearch={setSelectedSearch}
+              selectedSearch={selectedSearch}
             />
           }
         />

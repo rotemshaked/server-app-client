@@ -6,7 +6,8 @@ import Pagination from "../components/pagination/pagination";
 import Search from "../components/search/serach";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
-import SearchFilter from "../components/SearchFilter/SearchFilter";
+import SearchDropDown from "../components/searchDropDown/SearchDropDown";
+import SearcCheckBox from "../components/checkBox/CheckBox";
 import "../assets/styles.css";
 
 const ServersListPage = ({
@@ -23,6 +24,8 @@ const ServersListPage = ({
   setShowChangeCurrency,
   input,
   setInput,
+  selectedSearch,
+  setSelectedSearch,
 }) => {
   const [page, setPage] = useState(1);
   const [nextPage, setNextPage] = useState([]);
@@ -143,29 +146,30 @@ const ServersListPage = ({
         listToShowOnScreen.push(server);
       }
     });
-    return listToShowOnScreen;
+    if (listToShowOnScreen.length > 0) {
+      return listToShowOnScreen;
+    }
+    return;
   };
 
-  const showServersBySelectedType = (selectedType) => {
+  const showServersBySelectedType = () => {
     let listToShowOnScreen = [];
     serversList.forEach((server) => {
-      if (server.type === selectedType) {
+      if (server.type === selectedSearch) {
         listToShowOnScreen.push(server);
       }
     });
-    return listToShowOnScreen;
+    if (listToShowOnScreen.length > 0) {
+      return listToShowOnScreen;
+    }
+    return;
   };
 
-  const serversToShow = (selectedType) => {
+  const serversToShow = () => {
     let serversToMap = [];
-    // let handleSearch = handleSearchInput();
-    let selectefTypes = showServersBySelectedType(selectedType);
-    // handleSearch.length > 0
-    //   ? (serversToMap = [...handleSearch])
-    //   : (serversToMap = [...serversList]);
-    selectefTypes.length > 0
-      ? (serversToMap = [...selectefTypes])
-      : (serversToMap = [...serversList]);
+    serversToMap =
+      showServersBySelectedType() || handleSearchInput() || serversList;
+    console.log(serversToMap);
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
@@ -183,6 +187,8 @@ const ServersListPage = ({
             handleStart={handleStart}
           />
         );
+      } else {
+        return Error;
       }
     });
   };
@@ -201,9 +207,10 @@ const ServersListPage = ({
         <Search setInput={setInput} setSearchError={setSearchError} />
         {/* {searchError && errorMessage()} */}
         <div className="search-filter-container">
-          <SearchFilter
+          <SearchDropDown
+            setSelectedSearch={setSelectedSearch}
             serversTypes={serversTypes}
-            filterName="Server Type"
+            filterName="Servers Types"
             options={serversTypes.map((type) => {
               return (
                 <option value={type._id} key={type._id}>
@@ -211,11 +218,11 @@ const ServersListPage = ({
                 </option>
               );
             })}
-            handleChange={(e) => serversToShow(e.target.value)}
           />
-          <SearchFilter
+          <SearchDropDown
+            setSelectedSearch={setSelectedSearch}
             serversTypes={serversTypes}
-            filterName="Server Price"
+            filterName="Servers Prices"
             options={serversTypes.map((type) => {
               return (
                 <option value={type._id} key={type._id}>
@@ -224,6 +231,7 @@ const ServersListPage = ({
               );
             })}
           />
+          <SearcCheckBox />
         </div>
         <div className="serversContiner">
           {!serversList.length > 0 || !(serversTypes.length > 0) ? (
