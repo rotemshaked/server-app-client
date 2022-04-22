@@ -43,6 +43,7 @@ const ServersListPage = ({
       );
       setServersList(allServers.data.servers);
       setNextPage(allServers.data.next);
+      setLocalStorageServers(allServers.data.servers, allServers.data.next);
     } catch (error) {
       if (error.name === "AbortError") return;
       throw error;
@@ -51,6 +52,29 @@ const ServersListPage = ({
       console.log("abort servers");
       abortController.abort();
     };
+  };
+
+  const setLocalStorageServers = (serversList, nextPage) => {
+    let currentServers = localStorage.getItem("servers");
+    localStorage.clear();
+    if (currentServers !== null) {
+      const currentServersInLocalStorage = JSON.parse(currentServers);
+      console.log([...currentServersInLocalStorage, ...nextPage]);
+      const currentPlusNextPageServers = [
+        ...currentServersInLocalStorage,
+        ...nextPage,
+      ];
+      localStorage.setItem(
+        "servers",
+        JSON.stringify([...currentPlusNextPageServers])
+      );
+    } else {
+      const serversToSaveInLocalStorage = [...serversList, ...nextPage];
+      localStorage.setItem(
+        "servers",
+        JSON.stringify([...serversList, ...nextPage])
+      );
+    }
   };
 
   useEffect(() => {
@@ -169,7 +193,6 @@ const ServersListPage = ({
     let serversToMap = [];
     serversToMap =
       showServersBySelectedType() || handleSearchInput() || serversList;
-    console.log(serversToMap);
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;

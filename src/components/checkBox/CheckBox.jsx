@@ -7,10 +7,10 @@ const SearcCheckBox = ({ setSelectedSearch, filterName, options }) => {
   };
 
   return (
-    <React.Fragment>
+    <div>
       <input type="checkbox" id="checkBox"></input>
-      <label htmlFor="checkBox"></label>
-    </React.Fragment>
+      <label htmlFor="checkBox" className=""></label>
+    </div>
   );
 };
 

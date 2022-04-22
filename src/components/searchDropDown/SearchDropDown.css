@@ -6,12 +6,18 @@
   border: 2px solid blue;
 } */
 .search-filter-select {
-  text-indent: 1rem;
-  border-radius: 1rem;
+  text-indent: 0.5rem;
+  border-radius: 0.5rem;
   height: 1.5rem;
   margin-right: 1rem;
   background-color: white;
-  border: none;
+  border: transparent 1px solid;
   outline: none;
   width: 8rem;
+  cursor: pointer;
+}
+.search-filter-select:hover {
+  background-color: #f0e4e4;
+
+  /* border: 1px solid purple; */
 }
