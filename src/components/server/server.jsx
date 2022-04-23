@@ -13,6 +13,7 @@ const Server = ({
   handleDelete,
   handleStart,
   handleStop,
+  runningServer,
 }) => {
   return (
     <tr key={server._id} className="tr-servers">
@@ -38,9 +39,9 @@ const Server = ({
         >
           <FontAwesomeIcon icon={faPlay} className="icon-3" />
         </button>
-        {server.isRunning && (
+        {/* {server.isRunning && (
           <FontAwesomeIcon icon={faDatabase} className="icon-2" />
-        )}
+        )} */}
       </td>
       <td>
         <button

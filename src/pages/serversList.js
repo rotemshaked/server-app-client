@@ -31,6 +31,7 @@ const ServersListPage = ({
   const [nextPageServers, setNextPageServers] = useState([]);
   const [saveNextPageServers, setSaveNextPageServers] = useState(false);
   const [searchError, setSearchError] = useState(false);
+  const [serversInLocalStorage, setServersInLocalStorage] = useState([]);
   // const [serverListToShowOnScreen, setServerListToShowOnScreen] =
   useState(false);
 
@@ -59,39 +60,44 @@ const ServersListPage = ({
     const serversStoresInLocalStorage = JSON.parse(
       localStorage.getItem("servers")
     );
+    setServersInLocalStorage(serversStoresInLocalStorage);
     if (!serversStoresInLocalStorage) {
       const serverListPlusNextPageServers = [...allServers, ...nextPage];
       localStorage.setItem(
         "servers",
         JSON.stringify(serverListPlusNextPageServers)
       );
+      setServersInLocalStorage(serverListPlusNextPageServers);
     }
     if (saveNextPageServers) {
-      localStorage.clear();
-      console.log(...serversStoresInLocalStorage);
-      // const uniqueServers = Object.keys(...serversStoresInLocalStorage).forEach(
-      //   (key) => {
-      //     return serversStoresInLocalStorage[key] === nextPage[key];
-      //   }
-      // );
-      console.log(serversStoresInLocalStorage);
-      console.log(nextPage);
-      // localStorage.setItem("servers", JSON.stringify(uniqueServers));
+      const newServersListInLocalStorage = [...serversStoresInLocalStorage];
+      for (let i = 0; i < nextPage.length; i++) {
+        let existServer = false;
+        for (let j = 0; j < serversStoresInLocalStorage.length; j++) {
+          if (serversStoresInLocalStorage[j]._id === nextPage[i]._id) {
+            existServer = true;
+            return;
+          }
+        }
+        if (!existServer) {
+          newServersListInLocalStorage.push(nextPage[i]);
+        }
+      }
+      localStorage.setItem(
+        "servers",
+        JSON.stringify(newServersListInLocalStorage)
+      );
+      setServersInLocalStorage(newServersListInLocalStorage);
     }
     setSaveNextPageServers(false);
   };
-
-  // const b = { a: "1", b: "2", c: "3" };
-  // const a = new Set();
-  // a.add({ a: "1", b: "2", c: "3" });
-  // a.add(b);
-  // console.log(a.has(b));
 
   useEffect(() => {
     getServers(page);
     setUpdatedServersList(false);
     setShowChangeCurrency(true);
     setSearchError(false);
+    serversToShow();
   }, [updatedServersList, runningServer, page, currency]);
 
   useEffect(() => {
@@ -187,23 +193,30 @@ const ServersListPage = ({
     return;
   };
 
+  const slicedServersToShow = (array) => {
+    const limit = 10;
+    let endIndex = page;
+    let slicedServers = array.slice((endIndex - 1) * limit, endIndex * limit);
+    return slicedServers;
+  };
+
   const showServersBySelectedType = () => {
     let listToShowOnScreen = [];
-    serversList.forEach((server) => {
+    serversInLocalStorage.forEach((server) => {
       if (server.type === selectedSearch) {
         listToShowOnScreen.push(server);
       }
     });
     if (listToShowOnScreen.length > 0) {
-      return listToShowOnScreen;
+      return slicedServersToShow(listToShowOnScreen);
     }
-    return;
+    return slicedServersToShow(serversInLocalStorage);
   };
 
   const serversToShow = () => {
+    const serversToShow = slicedServersToShow(serversInLocalStorage);
     let serversToMap = [];
-    serversToMap =
-      showServersBySelectedType() || handleSearchInput() || serversList;
+    serversToMap = showServersBySelectedType();
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
@@ -219,6 +232,7 @@ const ServersListPage = ({
             handleDelete={handleDelete}
             handleStop={handleStop}
             handleStart={handleStart}
+            runningServer={runningServer}
           />
         );
       } else {
