@@ -28,12 +28,13 @@ const ServersListPage = ({
   setSelectedSearch,
 }) => {
   const [page, setPage] = useState(1);
-  const [nextPage, setNextPage] = useState([]);
+  const [nextPageServers, setNextPageServers] = useState([]);
+  const [saveNextPageServers, setSaveNextPageServers] = useState(false);
   const [searchError, setSearchError] = useState(false);
   // const [serverListToShowOnScreen, setServerListToShowOnScreen] =
   useState(false);
 
-  const getServers = async (page) => {
+  const getServers = async () => {
     const abortController = new AbortController();
     try {
       const allServers = await axios.get(
@@ -42,7 +43,7 @@ const ServersListPage = ({
         { signal: abortController.signal }
       );
       setServersList(allServers.data.servers);
-      setNextPage(allServers.data.next);
+      setNextPageServers(allServers.data.next);
       setLocalStorageServers(allServers.data.servers, allServers.data.next);
     } catch (error) {
       if (error.name === "AbortError") return;
@@ -54,28 +55,37 @@ const ServersListPage = ({
     };
   };
 
-  const setLocalStorageServers = (serversList, nextPage) => {
-    let currentServers = localStorage.getItem("servers");
-    localStorage.clear();
-    if (currentServers !== null) {
-      const currentServersInLocalStorage = JSON.parse(currentServers);
-      console.log([...currentServersInLocalStorage, ...nextPage]);
-      const currentPlusNextPageServers = [
-        ...currentServersInLocalStorage,
-        ...nextPage,
-      ];
+  const setLocalStorageServers = (allServers, nextPage) => {
+    const serversStoresInLocalStorage = JSON.parse(
+      localStorage.getItem("servers")
+    );
+    if (!serversStoresInLocalStorage) {
+      const serverListPlusNextPageServers = [...allServers, ...nextPage];
       localStorage.setItem(
         "servers",
-        JSON.stringify([...currentPlusNextPageServers])
-      );
-    } else {
-      const serversToSaveInLocalStorage = [...serversList, ...nextPage];
-      localStorage.setItem(
-        "servers",
-        JSON.stringify([...serversList, ...nextPage])
+        JSON.stringify(serverListPlusNextPageServers)
       );
     }
+    if (saveNextPageServers) {
+      localStorage.clear();
+      console.log(...serversStoresInLocalStorage);
+      // const uniqueServers = Object.keys(...serversStoresInLocalStorage).forEach(
+      //   (key) => {
+      //     return serversStoresInLocalStorage[key] === nextPage[key];
+      //   }
+      // );
+      console.log(serversStoresInLocalStorage);
+      console.log(nextPage);
+      // localStorage.setItem("servers", JSON.stringify(uniqueServers));
+    }
+    setSaveNextPageServers(false);
   };
+
+  // const b = { a: "1", b: "2", c: "3" };
+  // const a = new Set();
+  // a.add({ a: "1", b: "2", c: "3" });
+  // a.add(b);
+  // console.log(a.has(b));
 
   useEffect(() => {
     getServers(page);
@@ -152,7 +162,8 @@ const ServersListPage = ({
 
   const handleNextPage = () => {
     setPage(page + 1);
-    getServers(page + 1);
+    setSaveNextPageServers(true);
+    getServers();
   };
 
   const handlePreviousPage = () => {
@@ -289,7 +300,7 @@ const ServersListPage = ({
           page={page}
           handlePreviousPage={handlePreviousPage}
           handleNextPage={handleNextPage}
-          nextPage={nextPage}
+          nextPage={nextPageServers}
         />
       </div>
     </div>
