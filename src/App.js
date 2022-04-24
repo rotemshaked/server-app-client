@@ -16,7 +16,17 @@ function App() {
   const [showChangeCurrency, setShowChangeCurrency] = useState("false");
   const [input, setInput] = useState("");
   const [selectedSearch, setSelectedSearch] = useState([]);
-
+  const test = () => {
+  //   serversList.forEach((server) => {
+  //     console.log(server);
+  //     for (let i = 0; i < input.length; i++) {
+  //       // if(servers.name.includes){
+  //       // }
+  //     }
+  //     console.log(server);
+  //   });
+  // };
+  // test();
   return (
     <BrowserRouter>
       <NavBar
