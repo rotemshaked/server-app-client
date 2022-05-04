@@ -19,12 +19,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar
+      {/* <NavBar
         conversionRates={conversionRates}
         setConversionRates={setConversionRates}
         setCurrency={setCurrency}
         showChangeCurrency={showChangeCurrency}
-      />
+      /> */}
       <Routes>
         <Route
           path="/"
