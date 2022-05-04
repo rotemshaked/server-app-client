@@ -155,6 +155,7 @@ const ServersListPage = ({
   const handleStop = async (server) => {
     setRunningServer(true);
     try {
+      console.log("stop");
       if (server.isRunning) {
         await axios.put("https://server-app-server.herokuapp.com/servers", {
           _id: server._id,
