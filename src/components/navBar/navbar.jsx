@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./navbar.css";
 
-const NavBar = ({
+const Navbar = ({
   conversionRates,
   setConversionRates,
   setCurrency,
-  showChangeCurrency,
+  currencyIsShown,
 }) => {
   useEffect(() => {
     const abortController = new AbortController();
@@ -31,34 +31,29 @@ const NavBar = ({
   }, []);
 
   const handleSelectedCurrency = async (e) => {
-    try {
-      let currentCurrency = e.target.value;
-      setCurrency(currentCurrency);
-    } catch (err) {
-      console.log(err);
-    }
+    setCurrency(e.target.value);
   };
 
   let currencies = Object.keys(conversionRates);
 
   return (
-    <div className="nav-bar">
-      <Link className="home" to="/">
+    <div className="navbar-container">
+      <Link className="navbar-link" to="/">
         Home Page
       </Link>
-      <Link className="servers-list" to="/servers">
+      <Link className="navbar-link" to="/servers">
         Servers List
       </Link>
-      <Link className="create-server" to="/create">
+      <Link className="navbar-link" to="/create">
         Create Server
       </Link>
-      {showChangeCurrency && (
-        <div className="pick-currency">
-          <div className="pick-currency-div">Pick Currency &nbsp;</div>
+      {currencyIsShown && (
+        <div className="pick-currency-container">
+          <div>Pick Currency &nbsp;&nbsp;</div>
           <div>
             <select
               onChange={(e) => handleSelectedCurrency(e)}
-              className="currency"
+              className="currency-pick"
             >
               {currencies.map((currency) => {
                 return (
@@ -75,4 +70,4 @@ const NavBar = ({
   );
 };
 
-export default NavBar;
+export default Navbar;

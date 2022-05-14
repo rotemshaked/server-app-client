@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import NavBar from "./components/navBar/navbar";
+import Navbar from "./components/navBar/navbar";
 import Home from "./pages/home";
 import ServersListPage from "./pages/serversList";
 import CreateServer from "./pages/createServer";
@@ -13,22 +13,22 @@ function App() {
   const [updatedServersList, setUpdatedServersList] = useState(false);
   const [runningServer, setRunningServer] = useState(false);
   const [currency, setCurrency] = useState("USD");
-  const [showChangeCurrency, setShowChangeCurrency] = useState("false");
+  const [currencyIsShown, setCurrencyIsShown] = useState("false");
   const [input, setInput] = useState("");
   const [selectedSearch, setSelectedSearch] = useState([]);
 
   return (
     <BrowserRouter>
-      {/* <NavBar
+      <Navbar
         conversionRates={conversionRates}
         setConversionRates={setConversionRates}
         setCurrency={setCurrency}
-        showChangeCurrency={showChangeCurrency}
-      /> */}
-      <Routes>
+        currencyIsShown={currencyIsShown}
+      />
+      {/* <Routes>
         <Route
           path="/"
-          element={<Home setShowChangeCurrency={setShowChangeCurrency} />}
+          element={<Home setCurrencyIsShown={setCurrencyIsShown} />}
         />
         <Route
           path="/servers"
@@ -45,7 +45,7 @@ function App() {
               conversionRates={conversionRates}
               currency={currency}
               setConversionRates={setConversionRates}
-              setShowChangeCurrency={setShowChangeCurrency}
+              setCurrencyIsShown={setCurrencyIsShown}
               input={input}
               setInput={setInput}
               setSelectedSearch={setSelectedSearch}
@@ -62,11 +62,11 @@ function App() {
               updatedServersList={updatedServersList}
               setUpdatedServersList={setUpdatedServersList}
               setRunningServer={setRunningServer}
-              setShowChangeCurrency={setShowChangeCurrency}
+              setCurrencyIsShown={setCurrencyIsShown}
             />
           }
         />
-      </Routes>
+      </Routes> */}
     </BrowserRouter>
   );
 }

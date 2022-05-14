@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles.css";
 
-const Home = ({ setShowChangeCurrency }) => {
+const Home = ({ setCurrencyIsShown }) => {
   useEffect(() => {
-    setShowChangeCurrency(false);
+    setCurrencyIsShown(false);
   }, []);
 
   return (

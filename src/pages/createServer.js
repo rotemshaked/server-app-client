@@ -8,7 +8,7 @@ const CreateServer = ({
   updatedServersList,
   setUpdatedServersList,
   serversTypes,
-  setShowChangeCurrency,
+  setCurrencyIsShown,
 }) => {
   const [newServer, setNewServer] = useState({
     name: " ",
@@ -20,7 +20,7 @@ const CreateServer = ({
   useEffect(() => {
     setError(false);
     setUpdatedServersList(false);
-    setShowChangeCurrency(false);
+    setCurrencyIsShown(false);
   }, []);
 
   const handleChange = (e) => {

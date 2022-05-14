@@ -21,7 +21,7 @@ const ServersListPage = ({
   setRunningServer,
   conversionRates,
   currency,
-  setShowChangeCurrency,
+  setCurrencyIsShown,
   input,
   setInput,
   selectedSearch,
@@ -34,7 +34,6 @@ const ServersListPage = ({
   const [serversInLocalStorage, setServersInLocalStorage] = useState([]);
   // const [serverListToShowOnScreen, setServerListToShowOnScreen] =
   useState(false);
-
   const getServers = async () => {
     const abortController = new AbortController();
     try {
@@ -95,7 +94,7 @@ const ServersListPage = ({
   useEffect(() => {
     getServers(page);
     setUpdatedServersList(false);
-    setShowChangeCurrency(true);
+    setCurrencyIsShown(true);
     setSearchError(false);
     serversToShow();
   }, [updatedServersList, runningServer, page, currency]);
@@ -155,7 +154,6 @@ const ServersListPage = ({
   const handleStop = async (server) => {
     setRunningServer(true);
     try {
-      console.log("stop");
       if (server.isRunning) {
         await axios.put("https://server-app-server.herokuapp.com/servers", {
           _id: server._id,
