@@ -25,7 +25,6 @@ const Navbar = ({
       throw error;
     }
     return () => {
-      console.log("abort conversion rates");
       abortController.abort();
     };
   }, []);

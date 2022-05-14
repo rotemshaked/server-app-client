@@ -9,7 +9,6 @@
   display: flex;
   align-items: center;
   height: 3rem;
-  border: 0.2px solid red;
 }
 .navbar-link {
   margin: 0rem 1rem;
@@ -31,6 +30,7 @@
   color: aliceblue;
   font-weight: 400;
   font-size: large;
+  margin-right: 20%;
 }
 .currency-pick {
   border: none;
@@ -38,9 +38,11 @@
   height: 1.5rem;
   outline: none;
 }
-@media screen and (max-width: 693px) {
+@media screen and (max-width: 796px) {
   .navbar-container {
     height: 3.5rem;
+    justify-content: space-between;
+    border: 2px solid red;
   }
   .navbar-link {
     font-size: small;
@@ -53,7 +55,7 @@
     font-size: small;
   }
   .currency-pick {
-    width: 8rem;
+    width: 6rem;
     height: 1.2rem;
   }
 }
