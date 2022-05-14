@@ -41,8 +41,7 @@
 @media screen and (max-width: 796px) {
   .navbar-container {
     height: 3.5rem;
-    justify-content: space-between;
-    border: 2px solid red;
+    justify-content: flex-start;
   }
   .navbar-link {
     font-size: small;

@@ -10,19 +10,17 @@ const Home = ({ setCurrencyIsShown }) => {
   }, []);
 
   return (
-    <div className="home-page-div">
-      <div className="home-page">
-        <div className="first-sentence">Welcome to servers manager</div>
-        <div className="second-sentence">
-          Web app that allows users manage servers
-        </div>
-        <Link to="/servers">
-          <button className="button-1">
-            <FontAwesomeIcon icon={faArrowRight} />
-            &nbsp; Servers List
-          </button>
-        </Link>
+    <div className="home-page-container">
+      <div className="first-sentence">Welcome to servers manager</div>
+      <div className="second-sentence">
+        Web app that allows users manage servers
       </div>
+      <Link to="/servers">
+        <button className="button-1">
+          <FontAwesomeIcon icon={faArrowRight} />
+          &nbsp; Servers List
+        </button>
+      </Link>
     </div>
   );
 };

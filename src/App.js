@@ -25,12 +25,12 @@ function App() {
         setCurrency={setCurrency}
         currencyIsShown={currencyIsShown}
       />
-      {/* <Routes>
+      <Routes>
         <Route
           path="/"
           element={<Home setCurrencyIsShown={setCurrencyIsShown} />}
         />
-        <Route
+        {/* <Route
           path="/servers"
           element={
             <ServersListPage
@@ -65,8 +65,8 @@ function App() {
               setCurrencyIsShown={setCurrencyIsShown}
             />
           }
-        />
-      </Routes> */}
+        /> */}
+      </Routes>
     </BrowserRouter>
   );
 }
