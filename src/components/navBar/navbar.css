@@ -6,7 +6,6 @@
 }
 .navbar-container {
   background-color: #444444;
-  /* overflow-x: visible; */
   display: flex;
   align-items: center;
   height: 3rem;
