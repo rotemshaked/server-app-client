@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/navBar/navbar";
-import Home from "./pages/home";
+import Home from "./pages/home-page/home";
 import ServersListPage from "./pages/serversList";
 import CreateServer from "./pages/createServer";
 import "./assets/styles.css";
@@ -30,7 +30,7 @@ function App() {
           path="/"
           element={<Home setCurrencyIsShown={setCurrencyIsShown} />}
         />
-        {/* <Route
+        <Route
           path="/servers"
           element={
             <ServersListPage
@@ -53,7 +53,7 @@ function App() {
             />
           }
         />
-        <Route
+        {/* <Route
           path="/create"
           element={
             <CreateServer

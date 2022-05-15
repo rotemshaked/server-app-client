@@ -6,41 +6,6 @@
   padding: 0;
   font-family: "Hammersmith One", sans-serif;
 }
-.home-page-container {
-  background: linear-gradient(to right, #f0e2d7bb, rgba(168, 42, 218, 0.65)),
-    url("./home-page-img.jpg");
-  height: 95vh;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-}
-.first-sentence {
-  margin-top: 10%;
-  font-size: 4rem;
-}
-.second-sentence {
-  margin-top: 3%;
-  font-size: 2rem;
-}
-.button-1 {
-  margin-top: 30%;
-  font-size: 1.5rem;
-  height: 3rem;
-  width: 120%;
-  background-color: rgba(255, 255, 255, 0.983);
-  color: #272727;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-weight: bold;
-}
-.button-1:hover {
-  background-color: #414040;
-  color: white;
-}
 .servers-List-Page {
   background: linear-gradient(to right, #f0e2d7bb, rgba(168, 42, 218, 0.65)),
     url("./pexels-manuel-geissinger-325229.jpg");
