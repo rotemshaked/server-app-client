@@ -15,7 +15,8 @@ function App() {
   const [currency, setCurrency] = useState("USD");
   const [currencyIsShown, setCurrencyIsShown] = useState("false");
   const [input, setInput] = useState("");
-  const [selectedSearch, setSelectedSearch] = useState([]);
+  const [selectedSearchType, setSelectedSearchType] = useState([]);
+  const [selectedSearchAmount, setSelectedSearchAmount] = useState([]);
 
   return (
     <BrowserRouter>
@@ -48,12 +49,14 @@ function App() {
               setCurrencyIsShown={setCurrencyIsShown}
               input={input}
               setInput={setInput}
-              setSelectedSearch={setSelectedSearch}
-              selectedSearch={selectedSearch}
+              setSelectedSearchType={setSelectedSearchType}
+              selectedSearchType={selectedSearchType}
+              selectedSearchAmount={selectedSearchAmount}
+              setSelectedSearchAmount={setSelectedSearchAmount}
             />
           }
         />
-        {/* <Route
+        <Route
           path="/create"
           element={
             <CreateServer
@@ -65,7 +68,7 @@ function App() {
               setCurrencyIsShown={setCurrencyIsShown}
             />
           }
-        /> */}
+        />
       </Routes>
     </BrowserRouter>
   );

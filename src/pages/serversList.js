@@ -8,6 +8,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import SearchDropDown from "../components/searchDropDown/SearchDropDown";
 import SearcCheckBox from "../components/checkBox/CheckBox";
+import {
+  getServersService,
+  getTypesService,
+  handleDeleteService,
+  handleStartService,
+  handleStopService,
+} from "../services/services";
+import { slicedServersToShow } from "../utils/utils";
 import "../assets/styles.css";
 
 const ServersListPage = ({
@@ -24,8 +32,9 @@ const ServersListPage = ({
   setCurrencyIsShown,
   input,
   setInput,
-  selectedSearch,
-  setSelectedSearch,
+  selectedSearchType,
+  setSelectedSearchType,
+  selectedSearchAmount,
 }) => {
   const [page, setPage] = useState(1);
   const [nextPageServers, setNextPageServers] = useState([]);
@@ -33,136 +42,92 @@ const ServersListPage = ({
   const [searchError, setSearchError] = useState(false);
   const [serversInLocalStorage, setServersInLocalStorage] = useState([]);
   // const [serverListToShowOnScreen, setServerListToShowOnScreen] =
-  useState(false);
+  // useState(false);
+
   const getServers = async () => {
     const abortController = new AbortController();
-    try {
-      const allServers = await axios.get(
-        "https://server-app-server.herokuapp.com/servers",
-        { params: { page: page } },
-        { signal: abortController.signal }
-      );
-      setServersList(allServers.data.servers);
-      setNextPageServers(allServers.data.next);
-      setLocalStorageServers(allServers.data.servers, allServers.data.next);
-    } catch (error) {
-      if (error.name === "AbortError") return;
-      throw error;
-    }
-    return () => {
-      console.log("abort servers");
-      abortController.abort();
-    };
+    const servers = await getServersService(page, abortController);
+    setServersList(servers.servers);
+    setNextPageServers(servers.next);
+    // setLocalStorageServers(servers.data.servers, servers.data.next);
   };
 
-  const setLocalStorageServers = (allServers, nextPage) => {
-    const serversStoresInLocalStorage = JSON.parse(
-      localStorage.getItem("servers")
-    );
-    setServersInLocalStorage(serversStoresInLocalStorage);
-    if (!serversStoresInLocalStorage) {
-      const serverListPlusNextPageServers = [...allServers, ...nextPage];
-      localStorage.setItem(
-        "servers",
-        JSON.stringify(serverListPlusNextPageServers)
-      );
-      setServersInLocalStorage(serverListPlusNextPageServers);
-    }
-    if (saveNextPageServers) {
-      const newServersListInLocalStorage = [...serversStoresInLocalStorage];
-      for (let i = 0; i < nextPage.length; i++) {
-        let existServer = false;
-        for (let j = 0; j < serversStoresInLocalStorage.length; j++) {
-          if (serversStoresInLocalStorage[j]._id === nextPage[i]._id) {
-            existServer = true;
-            return;
-          }
-        }
-        if (!existServer) {
-          newServersListInLocalStorage.push(nextPage[i]);
-        }
-      }
-      localStorage.setItem(
-        "servers",
-        JSON.stringify(newServersListInLocalStorage)
-      );
-      setServersInLocalStorage(newServersListInLocalStorage);
-    }
-    setSaveNextPageServers(false);
+  const getServersTypes = async () => {
+    const abortController = new AbortController();
+    const serversTypes = await getTypesService(abortController);
+    setServersTypes(serversTypes);
   };
+
+  // const setLocalStorageServers = (allServers, nextPage) => {
+  //   const serversStoresInLocalStorage = JSON.parse(
+  //     localStorage.getItem("servers")
+  //   );
+  //   setServersInLocalStorage(serversStoresInLocalStorage);
+  //   if (!serversStoresInLocalStorage) {
+  //     const serverListPlusNextPageServers = [...allServers, ...nextPage];
+  //     localStorage.setItem(
+  //       "servers",
+  //       JSON.stringify(serverListPlusNextPageServers)
+  //     );
+  //     setServersInLocalStorage(serverListPlusNextPageServers);
+  //   }
+  //   if (saveNextPageServers) {
+  //     const newServersListInLocalStorage = [...serversStoresInLocalStorage];
+  //     for (let i = 0; i < nextPage.length; i++) {
+  //       let existServer = false;
+  //       for (let j = 0; j < serversStoresInLocalStorage.length; j++) {
+  //         if (serversStoresInLocalStorage[j]._id === nextPage[i]._id) {
+  //           existServer = true;
+  //           return;
+  //         }
+  //       }
+  //       if (!existServer) {
+  //         newServersListInLocalStorage.push(nextPage[i]);
+  //       }
+  //     }
+  //     localStorage.setItem(
+  //       "servers",
+  //       JSON.stringify(newServersListInLocalStorage)
+  //     );
+  //     setServersInLocalStorage(newServersListInLocalStorage);
+  //   }
+  //   setSaveNextPageServers(false);
+  // };
 
   useEffect(() => {
-    getServers(page);
+    getServers();
+    serversToShow();
+    getServersTypes();
     setUpdatedServersList(false);
     setCurrencyIsShown(true);
     setSearchError(false);
-    serversToShow();
   }, [updatedServersList, runningServer, page, currency]);
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    const getTypes = async () => {
-      try {
-        const allTypes = await axios.get(
-          "https://server-app-server.herokuapp.com/types",
-          { signal: abortController.signal }
-        );
-        setServersTypes(allTypes.data);
-      } catch (error) {
-        if (error.name === "AbortError") return;
-        throw error;
-      }
-    };
-    getTypes();
-    return () => {
-      console.log("abort types");
-      abortController.abort();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const abortController = new AbortController();
+  //   const serversTypes = getTypesService(abortController);
+  //   setServersTypes(serversTypes);
+  // }, []);
 
   const handleDelete = async (server) => {
-    try {
-      axios
-        .delete("https://server-app-server.herokuapp.com/servers", {
-          data: { _id: server._id },
-        })
-        .then(() => {
-          setUpdatedServersList(true);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (err) {
-      console.log(err);
-    }
+    const abortController = new AbortController();
+    const deletedSuccessfully = await handleDeleteService(
+      server,
+      abortController
+    );
+    if (deletedSuccessfully) setUpdatedServersList(true);
   };
 
   const handleStart = async (server) => {
-    setRunningServer(false);
-    try {
-      if (!server.isRunning) {
-        await axios.put("https://server-app-server.herokuapp.com/servers", {
-          _id: server._id,
-        });
-        setRunningServer(true);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    const abortController = new AbortController();
+    const start = await handleStartService(server, abortController);
+    if (start) setRunningServer(false);
   };
 
   const handleStop = async (server) => {
-    setRunningServer(true);
-    try {
-      if (server.isRunning) {
-        await axios.put("https://server-app-server.herokuapp.com/servers", {
-          _id: server._id,
-        });
-        setRunningServer(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    const abortController = new AbortController();
+    const stop = await handleStopService(server, abortController);
+    if (stop) setRunningServer(true);
   };
 
   const handleNextPage = () => {
@@ -182,40 +147,55 @@ const ServersListPage = ({
     let listToShowOnScreen = [];
     serversList.forEach((server) => {
       let serverValues = Object.values(server);
-      if (serverValues.includes(input)) {
+      if (serverValues.slice().includes(input)) {
         listToShowOnScreen.push(server);
       }
     });
     if (listToShowOnScreen.length > 0) {
       return listToShowOnScreen;
     }
-    return;
+    return false;
   };
 
-  const slicedServersToShow = (array) => {
-    const limit = 10;
-    let endIndex = page;
-    let slicedServers = array.slice((endIndex - 1) * limit, endIndex * limit);
-    return slicedServers;
-  };
+  // const slicedServersToShow = (array) => {
+  //   const limit = 10;
+  //   let endIndex = page;
+  //   let slicedServers = array.slice((endIndex - 1) * limit, endIndex * limit);
+  //   return slicedServers;
+  // };
 
   const showServersBySelectedType = () => {
     let listToShowOnScreen = [];
-    serversInLocalStorage.forEach((server) => {
-      if (server.type === selectedSearch) {
+    serversList.forEach((server) => {
+      if (server.type === selectedSearchType) {
         listToShowOnScreen.push(server);
       }
     });
     if (listToShowOnScreen.length > 0) {
       return slicedServersToShow(listToShowOnScreen);
     }
-    return slicedServersToShow(serversInLocalStorage);
+    return false;
   };
 
+  // const showServersBySelectedPrice = () => {
+  //   let listToShowOnScreen = [];
+  //   serversList.forEach((server) => {
+  //     if (server.type === selectedSearchType) {
+  //       listToShowOnScreen.push(server);
+  //     }
+  //   });
+  //   if (listToShowOnScreen.length > 0) {
+  //     return slicedServersToShow(listToShowOnScreen);
+  //   }
+  //   return false;
+  // };
+
   const serversToShow = () => {
-    const serversToShow = slicedServersToShow(serversInLocalStorage);
-    let serversToMap = [];
-    serversToMap = showServersBySelectedType();
+    let serversToMap =
+      showServersBySelectedType() ||
+      // showServersBySelectedPrice() ||
+      handleSearchInput() ||
+      slicedServersToShow(serversList, page);
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
@@ -255,19 +235,19 @@ const ServersListPage = ({
         {/* {searchError && errorMessage()} */}
         <div className="search-filter-container">
           <SearchDropDown
-            setSelectedSearch={setSelectedSearch}
+            setSelectedSearchType={setSelectedSearchType}
             serversTypes={serversTypes}
-            filterName="Servers Types"
+            filterName="ALL TYPES"
             options={serversTypes.map((type) => {
               return (
                 <option value={type._id} key={type._id}>
-                  {type.name.toUpperCase()}
+                  Type {type.name.toUpperCase()}
                 </option>
               );
             })}
           />
           <SearchDropDown
-            setSelectedSearch={setSelectedSearch}
+            setSelectedSearch={setSelectedSearchType}
             serversTypes={serversTypes}
             filterName="Servers Prices"
             options={serversTypes.map((type) => {
