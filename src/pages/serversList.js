@@ -49,7 +49,6 @@ const ServersListPage = ({
     const servers = await getServersService(page, abortController);
     setServersList(servers.servers);
     setNextPageServers(servers.next);
-    // setLocalStorageServers(servers.data.servers, servers.data.next);
   };
 
   const getServersTypes = async () => {
@@ -57,57 +56,6 @@ const ServersListPage = ({
     const serversTypes = await getTypesService(abortController);
     setServersTypes(serversTypes);
   };
-
-  // const setLocalStorageServers = (allServers, nextPage) => {
-  //   const serversStoresInLocalStorage = JSON.parse(
-  //     localStorage.getItem("servers")
-  //   );
-  //   setServersInLocalStorage(serversStoresInLocalStorage);
-  //   if (!serversStoresInLocalStorage) {
-  //     const serverListPlusNextPageServers = [...allServers, ...nextPage];
-  //     localStorage.setItem(
-  //       "servers",
-  //       JSON.stringify(serverListPlusNextPageServers)
-  //     );
-  //     setServersInLocalStorage(serverListPlusNextPageServers);
-  //   }
-  //   if (saveNextPageServers) {
-  //     const newServersListInLocalStorage = [...serversStoresInLocalStorage];
-  //     for (let i = 0; i < nextPage.length; i++) {
-  //       let existServer = false;
-  //       for (let j = 0; j < serversStoresInLocalStorage.length; j++) {
-  //         if (serversStoresInLocalStorage[j]._id === nextPage[i]._id) {
-  //           existServer = true;
-  //           return;
-  //         }
-  //       }
-  //       if (!existServer) {
-  //         newServersListInLocalStorage.push(nextPage[i]);
-  //       }
-  //     }
-  //     localStorage.setItem(
-  //       "servers",
-  //       JSON.stringify(newServersListInLocalStorage)
-  //     );
-  //     setServersInLocalStorage(newServersListInLocalStorage);
-  //   }
-  //   setSaveNextPageServers(false);
-  // };
-
-  useEffect(() => {
-    getServers();
-    serversToShow();
-    getServersTypes();
-    setUpdatedServersList(false);
-    setCurrencyIsShown(true);
-    setSearchError(false);
-  }, [updatedServersList, runningServer, page, currency]);
-
-  // useEffect(() => {
-  //   const abortController = new AbortController();
-  //   const serversTypes = getTypesService(abortController);
-  //   setServersTypes(serversTypes);
-  // }, []);
 
   const handleDelete = async (server) => {
     const abortController = new AbortController();
@@ -121,13 +69,13 @@ const ServersListPage = ({
   const handleStart = async (server) => {
     const abortController = new AbortController();
     const start = await handleStartService(server, abortController);
-    if (start) setRunningServer(false);
+    if (start) setRunningServer(true);
   };
 
   const handleStop = async (server) => {
     const abortController = new AbortController();
     const stop = await handleStopService(server, abortController);
-    if (stop) setRunningServer(true);
+    if (stop) setRunningServer(false);
   };
 
   const handleNextPage = () => {
@@ -156,13 +104,6 @@ const ServersListPage = ({
     }
     return false;
   };
-
-  // const slicedServersToShow = (array) => {
-  //   const limit = 10;
-  //   let endIndex = page;
-  //   let slicedServers = array.slice((endIndex - 1) * limit, endIndex * limit);
-  //   return slicedServers;
-  // };
 
   const showServersBySelectedType = () => {
     let listToShowOnScreen = [];
@@ -194,7 +135,7 @@ const ServersListPage = ({
     let serversToMap =
       showServersBySelectedType() ||
       // showServersBySelectedPrice() ||
-      handleSearchInput() ||
+      // handleSearchInput() ||
       slicedServersToShow(serversList, page);
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
@@ -227,6 +168,14 @@ const ServersListPage = ({
   //     </div>
   //   );
   // };
+  useEffect(() => {
+    getServers();
+    getServersTypes();
+    serversToShow();
+    setUpdatedServersList(false);
+    setCurrencyIsShown(true);
+    setSearchError(false);
+  }, [updatedServersList, runningServer, page, currency]);
 
   return (
     <div>
@@ -236,7 +185,6 @@ const ServersListPage = ({
         <div className="search-filter-container">
           <SearchDropDown
             setSelectedSearchType={setSelectedSearchType}
-            serversTypes={serversTypes}
             filterName="ALL TYPES"
             options={serversTypes.map((type) => {
               return (
@@ -247,8 +195,7 @@ const ServersListPage = ({
             })}
           />
           <SearchDropDown
-            setSelectedSearch={setSelectedSearchType}
-            serversTypes={serversTypes}
+            setSelectedSearchType={setSelectedSearchType}
             filterName="Servers Prices"
             options={serversTypes.map((type) => {
               return (
@@ -258,7 +205,10 @@ const ServersListPage = ({
               );
             })}
           />
-          <SearcCheckBox />
+          <SearcCheckBox
+            labelName="Running Servers"
+            setSelectedSearch={setSelectedSearchType}
+          />
         </div>
         <div className="serversContiner">
           {!serversList.length > 0 || !(serversTypes.length > 0) ? (

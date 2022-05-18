@@ -1,15 +1,26 @@
 import React from "react";
 import "./checkBox.css";
 
-const SearcCheckBox = ({ setSelectedSearch, filterName, options }) => {
-  const handleChange = (e) => {
-    setSelectedSearch(e.target.value);
+const SearcCheckBox = ({
+  setSelectedSearch,
+  filterName,
+  options,
+  labelName,
+}) => {
+  const handleClick = (e) => {
+    setSelectedSearch(e.target);
   };
 
   return (
-    <div>
-      <input type="checkbox" id="checkBox"></input>
-      <label htmlFor="checkBox" className=""></label>
+    <div className="check-box">
+      <input
+        type="checkbox"
+        className="check-box-input"
+        onClick={handleClick}
+      ></input>
+      <label htmlFor="checkBox" className="check-box-label">
+        {labelName}
+      </label>
     </div>
   );
 };

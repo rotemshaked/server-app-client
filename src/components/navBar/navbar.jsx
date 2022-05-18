@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { getCurrencies } from "../../services/services";
 import "./navbar.css";
 
 const Navbar = ({
@@ -9,24 +10,14 @@ const Navbar = ({
   setCurrency,
   currencyIsShown,
 }) => {
-  useEffect(() => {
+  const getCurrenciesRates = async () => {
     const abortController = new AbortController();
-    try {
-      axios
-        .get(
-          // "https://v6.exchangerate-api.com/v6/0e4c0b6173479f83c9344560/latest/USD",
-          { signal: abortController.signal }
-        )
-        .then((data) => {
-          setConversionRates(data.data.conversion_rates);
-        });
-    } catch (error) {
-      if (error.name === "AbortError") return;
-      throw error;
-    }
-    return () => {
-      abortController.abort();
-    };
+    const currenciesRates = await getCurrencies(abortController);
+    if (currenciesRates) setConversionRates(currenciesRates);
+  };
+
+  useEffect(() => {
+    getCurrenciesRates();
   }, []);
 
   const handleSelectedCurrency = async (e) => {

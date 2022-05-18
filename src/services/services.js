@@ -118,3 +118,24 @@ export const handleStopService = async (server, abortController) => {
     abortController.abort();
   };
 };
+
+export const getCurrencies = async (abortController) => {
+  try {
+    const currency = await axios.get(
+      "https://v6.exchangerate-api.com/v6/0e4c0b6173479f83c9344560/latest/USD",
+      { signal: abortController.signal }
+    );
+    return currency.data.conversion_rates;
+  } catch (error) {
+    if (error.name === "AbortError") {
+      console.log("aborted stopping server request");
+      return;
+    } else {
+      console.log("error in getting the currencies rates from api");
+    }
+  }
+  return () => {
+    console.log("aborted getting the currencies rates from api");
+    abortController.abort();
+  };
+};

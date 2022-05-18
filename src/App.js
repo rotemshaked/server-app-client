@@ -15,6 +15,7 @@ function App() {
   const [currency, setCurrency] = useState("USD");
   const [currencyIsShown, setCurrencyIsShown] = useState("false");
   const [input, setInput] = useState("");
+  const [searchDropDown, setSearchDropDown] = useState("");
   const [selectedSearchType, setSelectedSearchType] = useState([]);
   const [selectedSearchAmount, setSelectedSearchAmount] = useState([]);
 
@@ -49,6 +50,8 @@ function App() {
               setCurrencyIsShown={setCurrencyIsShown}
               input={input}
               setInput={setInput}
+              searchDropDown={searchDropDown}
+              setSearchDropDown={setSearchDropDown}
               setSelectedSearchType={setSelectedSearchType}
               selectedSearchType={selectedSearchType}
               selectedSearchAmount={selectedSearchAmount}

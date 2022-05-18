@@ -1,0 +1,22 @@
+.check-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.check-box-label {
+  padding: 0;
+  margin: 0;
+  text-indent: 0.5rem;
+  border-radius: 0.5rem;
+  color: aliceblue;
+  margin-right: 1rem;
+  width: auto;
+  display: flex;
+  font-size: small;
+}
+/* .check-box-input[] {
+} */
+input[type="checkbox"] {
+  /* color: aliceblue; */
+  /* accent-color: rgb(47, 255, 61); */
+}
