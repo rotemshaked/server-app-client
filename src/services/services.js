@@ -11,7 +11,6 @@ export const getServersService = async (page, abortController) => {
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("aborted get servers request");
-      return;
     } else {
       console.log("error in getting the servers from server");
     }
@@ -32,7 +31,6 @@ export const getTypesService = async (abortController) => {
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("aborted get servers types request");
-      return;
     } else {
       console.log("error in getting the servers types from server");
     }
@@ -56,7 +54,6 @@ export const handleDeleteService = async (server, abortController) => {
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("aborted get server delete request");
-      return;
     } else {
       console.log("error in getting the server to delete from server");
     }
@@ -82,7 +79,6 @@ export const handleStartService = async (server, abortController) => {
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("aborted starting server request");
-      return;
     } else {
       console.log("error in getting the server to start from server");
     }
@@ -94,6 +90,7 @@ export const handleStartService = async (server, abortController) => {
 };
 
 export const handleStopService = async (server, abortController) => {
+  // console.log(server, "server");
   try {
     if (server.isRunning) {
       const stop = await axios.put(
@@ -108,7 +105,6 @@ export const handleStopService = async (server, abortController) => {
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("aborted stopping server request");
-      return;
     } else {
       console.log("error in getting the server to stop from server");
     }
@@ -129,7 +125,6 @@ export const getCurrencies = async (abortController) => {
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("aborted stopping server request");
-      return;
     } else {
       console.log("error in getting the currencies rates from api");
     }

@@ -12,10 +12,10 @@ import {
   getServersService,
   getTypesService,
   handleDeleteService,
-  handleStartService,
-  handleStopService,
+  // handleStartService,
+  // handleStopService,
 } from "../services/services";
-import { slicedServersToShow } from "../utils/utils";
+import { slicedServersToShow, updateServersList } from "../utils/utils";
 import "../assets/styles.css";
 
 const ServersListPage = ({
@@ -38,17 +38,25 @@ const ServersListPage = ({
 }) => {
   const [page, setPage] = useState(1);
   const [nextPageServers, setNextPageServers] = useState([]);
-  const [saveNextPageServers, setSaveNextPageServers] = useState(false);
   const [searchError, setSearchError] = useState(false);
-  const [serversInLocalStorage, setServersInLocalStorage] = useState([]);
-  // const [serverListToShowOnScreen, setServerListToShowOnScreen] =
-  // useState(false);
+  const [serverListToShowOnScreen, setServerListToShowOnScreen] = useState([]);
 
   const getServers = async () => {
     const abortController = new AbortController();
     const servers = await getServersService(page, abortController);
-    setServersList(servers.servers);
+    const serversAndNextPageServers = [...servers.servers, ...servers.next];
+    setServerListToShowOnScreen(servers.servers);
     setNextPageServers(servers.next);
+    if (nextPageServers.length > 0) {
+      const newServers = updateServersList(
+        serversList,
+        serversAndNextPageServers
+      );
+      const updatedServers = [...serversList, ...newServers];
+      setServersList([...updatedServers]);
+    } else {
+      setServersList(serversAndNextPageServers);
+    }
   };
 
   const getServersTypes = async () => {
@@ -66,28 +74,27 @@ const ServersListPage = ({
     if (deletedSuccessfully) setUpdatedServersList(true);
   };
 
-  const handleStart = async (server) => {
-    const abortController = new AbortController();
-    const start = await handleStartService(server, abortController);
-    if (start) setRunningServer(true);
-  };
+  // const handleStart = async (server) => {
+  //   const abortController = new AbortController();
+  //   await handleStartService(server, abortController);
+  //   setRunningServer(true);
+  //   // console.log(server.isRunning);
+  // };
 
-  const handleStop = async (server) => {
-    const abortController = new AbortController();
-    const stop = await handleStopService(server, abortController);
-    if (stop) setRunningServer(false);
-  };
+  // const handleStop = async (server) => {
+  //   const abortController = new AbortController();
+  //   await handleStopService(server, abortController);
+  //   setRunningServer(false);
+  //   // console.log(server.isRunning);
+  // };
 
   const handleNextPage = () => {
     setPage(page + 1);
-    setSaveNextPageServers(true);
-    getServers();
   };
 
   const handlePreviousPage = () => {
     if (page > 1) {
       setPage(page - 1);
-      getServers();
     }
   };
 
@@ -132,11 +139,10 @@ const ServersListPage = ({
   // };
 
   const serversToShow = () => {
-    let serversToMap =
-      showServersBySelectedType() ||
-      // showServersBySelectedPrice() ||
-      // handleSearchInput() ||
-      slicedServersToShow(serversList, page);
+    let serversToMap = showServersBySelectedType() || serverListToShowOnScreen;
+    // showServersBySelectedPrice() ||
+    // handleSearchInput() ||
+    // slicedServersToShow(serverListToShowOnScreen, page);
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
@@ -150,8 +156,8 @@ const ServersListPage = ({
             conversionRates={conversionRates}
             currency={currency}
             handleDelete={handleDelete}
-            handleStop={handleStop}
-            handleStart={handleStart}
+            // handleStop={handleStop}
+            // handleStart={handleStart}
             runningServer={runningServer}
           />
         );
@@ -161,13 +167,6 @@ const ServersListPage = ({
     });
   };
 
-  // const errorMessage = () => {
-  //   return (
-  //     <div className="error-message">
-  //       Couldn't find server that match your search :(
-  //     </div>
-  //   );
-  // };
   useEffect(() => {
     getServers();
     getServersTypes();
