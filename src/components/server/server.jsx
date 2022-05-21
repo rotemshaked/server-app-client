@@ -1,49 +1,51 @@
-import "./server.css";
+import { useState } from "react";
+import {
+  handleStartService,
+  handleStopService,
+  handleDeleteService,
+} from "../../services/services";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDatabase } from "@fortawesome/free-solid-svg-icons";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import { handleStartService, handleStopService } from "../../services/services";
+import "./server.css";
 
 const Server = ({
   server,
   serverType,
   conversionRates,
   currency,
-  handleDelete,
+  setUpdatedServersList,
+  setSumChange,
+  sumChange,
 }) => {
   const [isRunningServer, setIsRunningServer] = useState(false);
-  // console.log(server.isRunning, "server.isRunning");
-  // console.log(isRunningServer, "isrun");
 
   const handleStart = async (server) => {
     const abortController = new AbortController();
     if (!isRunningServer) {
-      const start = await handleStartService(server, abortController);
-      if (start) setIsRunningServer(true);
-      console.log(start);
+      await handleStartService(server, abortController);
+      setSumChange(!sumChange);
+      setIsRunningServer(true);
     }
-    console.log("start");
   };
 
   const handleStop = async (server) => {
     const abortController = new AbortController();
     if (isRunningServer) {
-      let stop = await handleStopService(server, abortController);
-      console.log(stop);
-      if (stop) setIsRunningServer(false);
+      await handleStopService(server, abortController);
+      setSumChange(!sumChange);
+      setIsRunningServer(false);
     }
-    console.log("stop");
   };
 
-  const sumToPay = (server) => {
-    let sum = `${(conversionRates[currency] * server.sumToPay).toFixed(
-      2
-    )} ${currency}`;
-    console.log(sum);
-    return sum;
+  const handleDelete = async (server) => {
+    const abortController = new AbortController();
+    const deletedSuccessfully = await handleDeleteService(
+      server,
+      abortController
+    );
+    if (deletedSuccessfully) setUpdatedServersList(true);
   };
 
   return (
@@ -53,16 +55,15 @@ const Server = ({
       <td>{serverType.name.toUpperCase()}</td>
       <td>{`${serverType.pricePerMinute}$`}</td>
       <td>
-        {isRunningServer ? (
+        {server.isRunning ? (
           <span className="on">ON</span>
         ) : (
           <span className="off">OFF</span>
         )}
       </td>
-      <td>{sumToPay(server)}</td>
-      {/* <td>{`${(conversionRates[currency] * server.sumToPay).toFixed(
+      <td>{`${(conversionRates[currency] * server.sumToPay).toFixed(
         2
-      )} ${currency}`}</td> */}
+      )} ${currency}`}</td>
       <td>
         <button
           className="button-2"

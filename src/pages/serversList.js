@@ -8,13 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import SearchDropDown from "../components/searchDropDown/SearchDropDown";
 import SearcCheckBox from "../components/checkBox/CheckBox";
-import {
-  getServersService,
-  getTypesService,
-  handleDeleteService,
-  // handleStartService,
-  // handleStopService,
-} from "../services/services";
+import { getServersService, getTypesService } from "../services/services";
 import { slicedServersToShow, updateServersList } from "../utils/utils";
 import "../assets/styles.css";
 
@@ -40,6 +34,7 @@ const ServersListPage = ({
   const [nextPageServers, setNextPageServers] = useState([]);
   const [searchError, setSearchError] = useState(false);
   const [serverListToShowOnScreen, setServerListToShowOnScreen] = useState([]);
+  const [sumChange, setSumChange] = useState(false);
 
   const getServers = async () => {
     const abortController = new AbortController();
@@ -64,29 +59,6 @@ const ServersListPage = ({
     const serversTypes = await getTypesService(abortController);
     setServersTypes(serversTypes);
   };
-
-  const handleDelete = async (server) => {
-    const abortController = new AbortController();
-    const deletedSuccessfully = await handleDeleteService(
-      server,
-      abortController
-    );
-    if (deletedSuccessfully) setUpdatedServersList(true);
-  };
-
-  // const handleStart = async (server) => {
-  //   const abortController = new AbortController();
-  //   await handleStartService(server, abortController);
-  //   setRunningServer(true);
-  //   // console.log(server.isRunning);
-  // };
-
-  // const handleStop = async (server) => {
-  //   const abortController = new AbortController();
-  //   await handleStopService(server, abortController);
-  //   setRunningServer(false);
-  //   // console.log(server.isRunning);
-  // };
 
   const handleNextPage = () => {
     setPage(page + 1);
@@ -155,10 +127,13 @@ const ServersListPage = ({
             serverType={typeId}
             conversionRates={conversionRates}
             currency={currency}
-            handleDelete={handleDelete}
+            // handleDelete={handleDelete}
+            setUpdatedServersList={setUpdatedServersList}
+            setSumChange={setSumChange}
+            sumChange={sumChange}
             // handleStop={handleStop}
             // handleStart={handleStart}
-            runningServer={runningServer}
+            // runningServer={runningServer}
           />
         );
       } else {
@@ -174,7 +149,7 @@ const ServersListPage = ({
     setUpdatedServersList(false);
     setCurrencyIsShown(true);
     setSearchError(false);
-  }, [updatedServersList, runningServer, page, currency]);
+  }, [updatedServersList, sumChange, page, currency]);
 
   return (
     <div>

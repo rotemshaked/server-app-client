@@ -90,7 +90,6 @@ export const handleStartService = async (server, abortController) => {
 };
 
 export const handleStopService = async (server, abortController) => {
-  // console.log(server, "server");
   try {
     if (server.isRunning) {
       const stop = await axios.put(
