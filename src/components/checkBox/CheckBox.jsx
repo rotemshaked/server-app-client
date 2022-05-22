@@ -3,12 +3,13 @@ import "./checkBox.css";
 
 const SearcCheckBox = ({
   setSelectedSearch,
+  selectedSearch,
   filterName,
   options,
   labelName,
 }) => {
   const handleClick = (e) => {
-    setSelectedSearch(e.target);
+    setSelectedSearch(!selectedSearch);
   };
 
   return (
@@ -18,9 +19,7 @@ const SearcCheckBox = ({
         className="check-box-input"
         onClick={handleClick}
       ></input>
-      <label htmlFor="checkBox" className="check-box-label">
-        {labelName}
-      </label>
+      <label className="check-box-label">{labelName}</label>
     </div>
   );
 };

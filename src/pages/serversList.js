@@ -37,7 +37,7 @@ const ServersListPage = ({
   const [selectedSearchType, setSelectedSearchType] = useState("");
   // const [typefilterName, setTypeFilterName] = useState("All Types");
   // const [pricefilterName, setPriceFilterName] = useState("Servers Prices");
-  // const [selectedSearch, setSelectedSearch] = useState("");
+  const [selectedSearch, setSelectedSearch] = useState(false);
 
   const getServers = async () => {
     const abortController = new AbortController();
@@ -97,8 +97,8 @@ const ServersListPage = ({
   };
 
   const handlePriceChange = (e) => {
-    setSelectedSearchPrice(e.target.value);
     setSelectedSearchType("");
+    setSelectedSearchPrice(e.target.value);
   };
 
   const showServersBySelectedDropDown = (selectedSearch) => {
@@ -114,15 +114,34 @@ const ServersListPage = ({
     return false;
   };
 
+  const showServersByCheckBox = () => {
+    let listToShowOnScreen = [];
+    serversList.forEach((server) => {
+      console.log(server);
+      if (server.isRunning === true) {
+        listToShowOnScreen.push(server);
+      }
+    });
+    if (listToShowOnScreen.length > 0) {
+      return slicedServersToShow(listToShowOnScreen);
+    }
+    return false;
+  };
+
   const serversToMapFromToShowOnScreen = () => {
     if (selectedSearchType) {
       let servers = showServersBySelectedDropDown(selectedSearchType);
       if (servers.length > 0) {
         return servers;
       }
-    }
-    if (selectedSearchPrice) {
+    } else if (selectedSearchPrice) {
       let servers = showServersBySelectedDropDown(selectedSearchPrice);
+      if (servers.length > 0) {
+        return servers;
+      }
+    } else if (selectedSearch) {
+      let servers = showServersByCheckBox();
+      console.log("servers", showServersByCheckBox());
       if (servers.length > 0) {
         return servers;
       }
@@ -165,7 +184,7 @@ const ServersListPage = ({
     setUpdatedServersList(false);
     setCurrencyIsShown(true);
     setSearchError(false);
-  }, [updatedServersList, sumChange, page, currency]);
+  }, [updatedServersList, sumChange, page, currency, selectedSearch]);
 
   return (
     <div>
@@ -197,7 +216,8 @@ const ServersListPage = ({
           />
           <SearcCheckBox
             labelName="Running Servers"
-            setSelectedSearch={setSelectedSearchType}
+            selectedSearch={selectedSearch}
+            setSelectedSearch={setSelectedSearch}
           />
         </div>
         <div className="serversContiner">
