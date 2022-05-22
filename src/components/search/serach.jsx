@@ -3,7 +3,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import "./search.css";
 import { useState } from "react";
 
-const Search = ({ setInput, handleSearchClick, setSearchError }) => {
+const Search = ({ setInput, setSearchError }) => {
   const handleInput = (e) => {
     setSearchError(false);
     setInput(e.target.value);

@@ -1,10 +1,6 @@
 import "./SearchDropDown.css";
 
-const SearchDropDown = ({ setSelectedSearchType, filterName, options }) => {
-  const handleChange = (e) => {
-    setSelectedSearchType(e.target.value);
-  };
-
+const SearchDropDown = ({ handleChange, filterName, options }) => {
   return (
     <div className="search-filter-div">
       <select

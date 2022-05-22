@@ -26,8 +26,6 @@ const ServersListPage = ({
   setCurrencyIsShown,
   input,
   setInput,
-  selectedSearchType,
-  setSelectedSearchType,
   selectedSearchAmount,
 }) => {
   const [page, setPage] = useState(1);
@@ -35,6 +33,11 @@ const ServersListPage = ({
   const [searchError, setSearchError] = useState(false);
   const [serverListToShowOnScreen, setServerListToShowOnScreen] = useState([]);
   const [sumChange, setSumChange] = useState(false);
+  const [selectedSearchPrice, setSelectedSearchPrice] = useState("");
+  const [selectedSearchType, setSelectedSearchType] = useState("");
+  // const [typefilterName, setTypeFilterName] = useState("All Types");
+  // const [pricefilterName, setPriceFilterName] = useState("Servers Prices");
+  // const [selectedSearch, setSelectedSearch] = useState("");
 
   const getServers = async () => {
     const abortController = new AbortController();
@@ -71,23 +74,37 @@ const ServersListPage = ({
   };
 
   const handleSearchInput = () => {
-    let listToShowOnScreen = [];
-    serversList.forEach((server) => {
-      let serverValues = Object.values(server);
-      if (serverValues.slice().includes(input)) {
-        listToShowOnScreen.push(server);
-      }
-    });
-    if (listToShowOnScreen.length > 0) {
+    if (input.length > 0) {
+      let listToShowOnScreen = [];
+      // let splitedInput = input.split("");
+      // let updatedServers = serversList.filter((server) => {
+      //   return Object.values(server).find((match) => {
+      //     return match.includes(input);
+      //   });
+      // });
+      // console.log(updatedServers, "new");
+      // console.log(listToShowOnScreen.length);
+      // listToShowOnScreen.push(updatedServers);
+
       return listToShowOnScreen;
     }
     return false;
   };
 
-  const showServersBySelectedType = () => {
+  const handleTypeChange = (e) => {
+    setSelectedSearchPrice("");
+    setSelectedSearchType(e.target.value);
+  };
+
+  const handlePriceChange = (e) => {
+    setSelectedSearchPrice(e.target.value);
+    setSelectedSearchType("");
+  };
+
+  const showServersBySelectedDropDown = (selectedSearch) => {
     let listToShowOnScreen = [];
     serversList.forEach((server) => {
-      if (server.type === selectedSearchType) {
+      if (server.type === selectedSearch) {
         listToShowOnScreen.push(server);
       }
     });
@@ -97,24 +114,27 @@ const ServersListPage = ({
     return false;
   };
 
-  // const showServersBySelectedPrice = () => {
-  //   let listToShowOnScreen = [];
-  //   serversList.forEach((server) => {
-  //     if (server.type === selectedSearchType) {
-  //       listToShowOnScreen.push(server);
-  //     }
-  //   });
-  //   if (listToShowOnScreen.length > 0) {
-  //     return slicedServersToShow(listToShowOnScreen);
-  //   }
-  //   return false;
-  // };
+  const serversToMapFromToShowOnScreen = () => {
+    if (selectedSearchType) {
+      let servers = showServersBySelectedDropDown(selectedSearchType);
+      if (servers.length > 0) {
+        return servers;
+      }
+    }
+    if (selectedSearchPrice) {
+      let servers = showServersBySelectedDropDown(selectedSearchPrice);
+      if (servers.length > 0) {
+        return servers;
+      }
+    }
+    // else if (selectedSearchPrice) return;
+    // showServersBySelectedDropDown(selectedSearchPrice);
+    return serverListToShowOnScreen;
+    // handleSearchInput() ||
+  };
 
   const serversToShow = () => {
-    let serversToMap = showServersBySelectedType() || serverListToShowOnScreen;
-    // showServersBySelectedPrice() ||
-    // handleSearchInput() ||
-    // slicedServersToShow(serverListToShowOnScreen, page);
+    const serversToMap = serversToMapFromToShowOnScreen();
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
@@ -127,13 +147,9 @@ const ServersListPage = ({
             serverType={typeId}
             conversionRates={conversionRates}
             currency={currency}
-            // handleDelete={handleDelete}
             setUpdatedServersList={setUpdatedServersList}
             setSumChange={setSumChange}
             sumChange={sumChange}
-            // handleStop={handleStop}
-            // handleStart={handleStart}
-            // runningServer={runningServer}
           />
         );
       } else {
@@ -158,8 +174,8 @@ const ServersListPage = ({
         {/* {searchError && errorMessage()} */}
         <div className="search-filter-container">
           <SearchDropDown
-            setSelectedSearchType={setSelectedSearchType}
-            filterName="ALL TYPES"
+            handleChange={handleTypeChange}
+            filterName="All Types"
             options={serversTypes.map((type) => {
               return (
                 <option value={type._id} key={type._id}>
@@ -169,7 +185,7 @@ const ServersListPage = ({
             })}
           />
           <SearchDropDown
-            setSelectedSearchType={setSelectedSearchType}
+            handleChange={handlePriceChange}
             filterName="Servers Prices"
             options={serversTypes.map((type) => {
               return (
