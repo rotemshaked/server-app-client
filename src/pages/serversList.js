@@ -19,14 +19,9 @@ const ServersListPage = ({
   setServersTypes,
   updatedServersList,
   setUpdatedServersList,
-  runningServer,
-  setRunningServer,
   conversionRates,
   currency,
   setCurrencyIsShown,
-  input,
-  setInput,
-  selectedSearchAmount,
 }) => {
   const [page, setPage] = useState(1);
   const [nextPageServers, setNextPageServers] = useState([]);
@@ -35,9 +30,8 @@ const ServersListPage = ({
   const [sumChange, setSumChange] = useState(false);
   const [selectedSearchPrice, setSelectedSearchPrice] = useState("");
   const [selectedSearchType, setSelectedSearchType] = useState("");
-  // const [typefilterName, setTypeFilterName] = useState("All Types");
-  // const [pricefilterName, setPriceFilterName] = useState("Servers Prices");
   const [selectedSearch, setSelectedSearch] = useState(false);
+  const [input, setInput] = useState("");
 
   const getServers = async () => {
     const abortController = new AbortController();
@@ -74,30 +68,38 @@ const ServersListPage = ({
   };
 
   const handleSearchInput = () => {
-    if (input.length > 0) {
-      let listToShowOnScreen = [];
-      // let splitedInput = input.split("");
-      // let updatedServers = serversList.filter((server) => {
-      //   return Object.values(server).find((match) => {
-      //     return match.includes(input);
-      //   });
-      // });
-      // console.log(updatedServers, "new");
-      // console.log(listToShowOnScreen.length);
-      // listToShowOnScreen.push(updatedServers);
-
-      return listToShowOnScreen;
-    }
-    return false;
+    let listToShowOnScreen = [];
+    serversList.filter((server) => {
+      if (
+        !listToShowOnScreen.find(
+          (serverList) => serverList._id === server.id
+        ) &&
+        server.name.toUpperCase().includes(input.toUpperCase())
+      ) {
+        console.log(slicedServersToShow(listToShowOnScreen), "lis");
+        listToShowOnScreen.push(server);
+      }
+      if (
+        !listToShowOnScreen.find(
+          (serverList) => serverList._id === server.id
+        ) &&
+        server.ipAddress.includes(input)
+      ) {
+        listToShowOnScreen.push(server);
+      }
+    });
+    return slicedServersToShow(listToShowOnScreen);
   };
 
   const handleTypeChange = (e) => {
     setSelectedSearchPrice("");
+    setSelectedSearch(false);
     setSelectedSearchType(e.target.value);
   };
 
   const handlePriceChange = (e) => {
     setSelectedSearchType("");
+    setSelectedSearch(false);
     setSelectedSearchPrice(e.target.value);
   };
 
@@ -143,11 +145,13 @@ const ServersListPage = ({
       if (servers.length > 0) {
         return servers;
       }
+    } else if (input) {
+      let servers = handleSearchInput();
+      if (servers.length > 0) {
+        return servers;
+      }
     }
-    // else if (selectedSearchPrice) return;
-    // showServersBySelectedDropDown(selectedSearchPrice);
-    return serverListToShowOnScreen;
-    // handleSearchInput() ||
+    return slicedServersToShow(serverListToShowOnScreen);
   };
 
   const serversToShow = () => {
@@ -187,7 +191,7 @@ const ServersListPage = ({
   return (
     <div>
       <div className="servers-List-Page">
-        <Search setInput={setInput} setSearchError={setSearchError} />
+        <Search setInput={setInput} />
         {/* {searchError && errorMessage()} */}
         <div className="search-filter-container">
           <SearchDropDown
