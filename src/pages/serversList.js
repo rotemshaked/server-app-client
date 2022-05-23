@@ -117,7 +117,6 @@ const ServersListPage = ({
   const showServersByCheckBox = () => {
     let listToShowOnScreen = [];
     serversList.forEach((server) => {
-      console.log(server);
       if (server.isRunning === true) {
         listToShowOnScreen.push(server);
       }
@@ -141,7 +140,6 @@ const ServersListPage = ({
       }
     } else if (selectedSearch) {
       let servers = showServersByCheckBox();
-      console.log("servers", showServersByCheckBox());
       if (servers.length > 0) {
         return servers;
       }

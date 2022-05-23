@@ -19,23 +19,19 @@ const Server = ({
   setSumChange,
   sumChange,
 }) => {
-  const [isRunningServer, setIsRunningServer] = useState(false);
-
   const handleStart = async (server) => {
     const abortController = new AbortController();
-    if (!isRunningServer) {
+    if (!server.isRunning) {
       await handleStartService(server, abortController);
       setSumChange(!sumChange);
-      setIsRunningServer(true);
     }
   };
 
   const handleStop = async (server) => {
     const abortController = new AbortController();
-    if (isRunningServer) {
+    if (server.isRunning) {
       await handleStopService(server, abortController);
       setSumChange(!sumChange);
-      setIsRunningServer(false);
     }
   };
 
