@@ -127,7 +127,7 @@ const ServersListPage = ({
     return false;
   };
 
-  const serversToMapFromToShowOnScreen = () => {
+  const serversToMapToShowOnScreen = () => {
     if (selectedSearchType) {
       let servers = showServersBySelectedDropDown(selectedSearchType);
       if (servers.length > 0) {
@@ -151,7 +151,7 @@ const ServersListPage = ({
   };
 
   const serversToShow = () => {
-    const serversToMap = serversToMapFromToShowOnScreen();
+    const serversToMap = serversToMapToShowOnScreen();
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
@@ -216,6 +216,8 @@ const ServersListPage = ({
             labelName="Running Servers"
             selectedSearch={selectedSearch}
             setSelectedSearch={setSelectedSearch}
+            setSelectedSearchType={setSelectedSearchType}
+            setSelectedSearchPrice={setSelectedSearchPrice}
           />
         </div>
         <div className="serversContiner">

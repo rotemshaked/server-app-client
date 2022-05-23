@@ -4,12 +4,14 @@ import "./checkBox.css";
 const SearcCheckBox = ({
   setSelectedSearch,
   selectedSearch,
-  filterName,
-  options,
   labelName,
+  setSelectedSearchType,
+  setSelectedSearchPrice,
 }) => {
   const handleClick = (e) => {
     setSelectedSearch(!selectedSearch);
+    setSelectedSearchType("");
+    setSelectedSearchPrice("");
   };
 
   return (
