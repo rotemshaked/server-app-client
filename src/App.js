@@ -2,8 +2,8 @@ import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/navBar/navbar";
 import Home from "./pages/home-page/home";
-import ServersListPage from "./pages/serversList";
-import CreateServer from "./pages/createServer";
+import ServersListPage from "./pages/servers-list-page/serversList";
+import CreateServer from "./pages/create-server-page/createServer";
 import "./assets/styles.css";
 
 function App() {
@@ -11,11 +11,8 @@ function App() {
   const [serversTypes, setServersTypes] = useState([]);
   const [conversionRates, setConversionRates] = useState([]);
   const [updatedServersList, setUpdatedServersList] = useState(false);
-  const [runningServer, setRunningServer] = useState(false);
   const [currency, setCurrency] = useState("USD");
-  const [currencyIsShown, setCurrencyIsShown] = useState("false");
-  const [searchDropDown, setSearchDropDown] = useState("");
-  const [selectedSearchAmount, setSelectedSearchAmount] = useState([]);
+  const [currencyIsShown, setCurrencyIsShown] = useState(false);
 
   return (
     <BrowserRouter>
@@ -40,16 +37,9 @@ function App() {
               setServersTypes={setServersTypes}
               updatedServersList={updatedServersList}
               setUpdatedServersList={setUpdatedServersList}
-              runningServer={runningServer}
-              setRunningServer={setRunningServer}
               conversionRates={conversionRates}
               currency={currency}
-              setConversionRates={setConversionRates}
               setCurrencyIsShown={setCurrencyIsShown}
-              searchDropDown={searchDropDown}
-              setSearchDropDown={setSearchDropDown}
-              selectedSearchAmount={selectedSearchAmount}
-              setSelectedSearchAmount={setSelectedSearchAmount}
             />
           }
         />
@@ -58,10 +48,8 @@ function App() {
           element={
             <CreateServer
               serversTypes={serversTypes}
-              serversList={serversList}
               updatedServersList={updatedServersList}
               setUpdatedServersList={setUpdatedServersList}
-              setRunningServer={setRunningServer}
               setCurrencyIsShown={setCurrencyIsShown}
             />
           }

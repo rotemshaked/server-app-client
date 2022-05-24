@@ -1,0 +1,71 @@
+.servers-List-Page {
+  background: linear-gradient(to right, #f0e2d7bb, rgba(168, 42, 218, 0.65)),
+    url("../../assets/servers-list-page.jpg");
+  min-height: 95vh;
+  background-size: cover;
+  background-repeat: no-repeat, repeat;
+  background-position: center;
+  position: relative;
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: column;
+  align-items: center;
+}
+.serversContiner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 2%;
+  /* border: #c08e2b 2px solid; */
+}
+.servers {
+  /* display: flex;
+  flex-wrap: wrap; */
+  /* align-items: center;
+  justify-content: center; */
+}
+.servers-table {
+  width: 75vw;
+  /* background-color: white; */
+  height: 3rem;
+  /* border: 1px solid white; */
+}
+.servers-table th {
+  background-color: #9e9d9db0;
+  padding: 1rem;
+  color: #414040;
+  font-size: 1.5rem;
+}
+.search-filter-container {
+  margin: 1rem 0rem 1rem 1rem;
+  display: flex;
+  width: 50%;
+}
+/* .pick-currency {
+  margin-top: 1rem;
+  color: black;
+  font-weight: bold;
+  height: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+} */
+/* .serversContiner {
+  width: 100%;
+  display: flex;
+  margin-top: 10%;
+  border: #c08e2b 2px solid;
+} */
+/* .currency {
+  border: none;
+  width: 5rem;
+  height: 1.5rem;
+  outline: none;
+  margin-top: 0.5rem;
+} */
+.error-message {
+  height: auto;
+  width: auto;
+  margin: 2rem;
+  background-color: red;
+}
