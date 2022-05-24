@@ -3,7 +3,7 @@
     url("../../assets/server.jpg");
   min-height: 95vh;
   background-size: cover;
-  background-repeat: no-repeat, repeat;
+  background-repeat: no-repeat;
   background-position: center;
   color: white;
   position: relative;
@@ -59,7 +59,6 @@ input {
 .submit-Button {
   min-width: 12rem;
   height: 2.5rem;
-  align-self: center;
   cursor: pointer;
   font-weight: 400;
   background-color: #414040;
@@ -84,20 +83,12 @@ input {
 }
 .created {
   background-color: rgba(172, 255, 47, 0.857);
-  border: 3px solid rgba(172, 255, 47, 0.857);
 }
 .error {
   background-color: red;
-  border: 3px solid red;
 }
-.load {
-  font-weight: bold;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  height: 90%;
-  width: 108%;
+@media screen and (max-width: 1300px) {
+  form {
+    width: 55%;
+  }
 }

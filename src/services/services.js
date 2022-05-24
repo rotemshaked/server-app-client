@@ -133,3 +133,19 @@ export const getCurrencies = async (abortController) => {
     abortController.abort();
   };
 };
+
+export const createNewServer = async (newServer, abortController) => {
+  try {
+    const createServer = await axios.post(
+      "https://server-app-server.herokuapp.com/create",
+      newServer
+    );
+    return createServer;
+  } catch (error) {
+    if (error.name === "AbortError") {
+      console.log("aborted create server request");
+    } else {
+      console.log("can not create new server");
+    }
+  }
+};

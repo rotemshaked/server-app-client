@@ -3,12 +3,12 @@ import Server from "../../components/server/server";
 import Loader from "../../components/loader/loader";
 import Pagination from "../../components/pagination/pagination";
 import Search from "../../components/search/serach";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import SearchDropDown from "../../components/searchDropDown/SearchDropDown";
 import SearcCheckBox from "../../components/checkBox/CheckBox";
 import { getServersService, getTypesService } from "../../services/services";
 import { slicedServersToShow, newServersToAddToList } from "../../utils/utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import "./serversList.css";
 
 const ServersListPage = ({
@@ -25,7 +25,6 @@ const ServersListPage = ({
   const [nextPageServers, setNextPageServers] = useState([]);
   const [serverListToShowOnScreen, setServerListToShowOnScreen] = useState([]);
   const [sumChange, setSumChange] = useState(false);
-  const [selectedSearchPrice, setSelectedSearchPrice] = useState(null);
   const [selectedSearchType, setSelectedSearchType] = useState(null);
   const [selectedSearch, setSelectedSearch] = useState(false);
   const [input, setInput] = useState(null);
@@ -37,12 +36,12 @@ const ServersListPage = ({
     setServerListToShowOnScreen(servers.servers);
     setNextPageServers(servers.next);
     if (nextPageServers.length > 0) {
-      const newServersToAdd = newServersToAddToList(
+      const newServersList = newServersToAddToList(
         serversList,
         serversAndNextPageServers
       );
-      const updatedServers = [...serversList, ...newServersToAdd];
-      setServersList([...updatedServers]);
+      // const updatedServers = [...serversList, ...newServersToAdd];
+      setServersList([...newServersList]);
     } else {
       setServersList(serversAndNextPageServers);
     }
@@ -67,15 +66,8 @@ const ServersListPage = ({
   };
 
   const handleTypeChange = (e) => {
-    setSelectedSearchPrice(null);
     setSelectedSearch(false);
     setSelectedSearchType(e.target.value);
-  };
-
-  const handlePriceChange = (e) => {
-    setSelectedSearchType(null);
-    setSelectedSearch(false);
-    setSelectedSearchPrice(e.target.value);
   };
 
   const showServersBySelectedDropDown = (selectedSearch) => {
@@ -115,7 +107,6 @@ const ServersListPage = ({
         server.name.toLowerCase().includes(input) ||
         server.ipAddress.includes(input)
       ) {
-        console.log("server", server);
         listToShowOnScreen.push(server);
       }
     });
@@ -124,16 +115,9 @@ const ServersListPage = ({
     }
     return false;
   };
-
-  console.log(
-    showServersBySelectedDropDown(selectedSearchType),
-    "showServersBySelectedDropDown(selectedSearchType)"
-  );
-
   const serversToShow = () => {
     const serversToMap =
       showServersBySelectedDropDown(selectedSearchType) ||
-      showServersBySelectedDropDown(selectedSearchPrice) ||
       showServersByCheckBox() ||
       handleSearchInput() ||
       slicedServersToShow(serverListToShowOnScreen);
@@ -174,13 +158,11 @@ const ServersListPage = ({
     setCurrencyIsShown(true);
   }, [updatedServersList, sumChange, page, currency, selectedSearch]);
 
-  const getOptions = (fields, name) => {
+  const getOptions = (fields) => {
     return fields.map((field) => {
       return (
         <option value={field._id} key={field._id}>
-          {typeof field[name] === "number"
-            ? field[name] + "$ per minute"
-            : "Type - " + field[name].toUpperCase()}
+          {`${field.name.toUpperCase()} - ${field.pricePerMinute}$ per minute`}
         </option>
       );
     });
@@ -196,17 +178,11 @@ const ServersListPage = ({
             selected="Servers Types"
             options={getOptions(serversTypes, "name")}
           />
-          <SearchDropDown
-            handleChange={handlePriceChange}
-            selected="Servers Prices"
-            options={getOptions(serversTypes, "pricePerMinute")}
-          />
           <SearcCheckBox
             labelName="Running Servers"
             selectedSearch={selectedSearch}
             setSelectedSearch={setSelectedSearch}
             setSelectedSearchType={setSelectedSearchType}
-            setSelectedSearchPrice={setSelectedSearchPrice}
           />
         </div>
         <div className="serversContiner">

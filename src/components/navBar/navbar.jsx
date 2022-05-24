@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { getCurrencies } from "../../services/services";
 import "./navbar.css";
 

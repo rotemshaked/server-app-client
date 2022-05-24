@@ -1,7 +1,7 @@
-import "./pagination.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import "./pagination.css";
 
 const Pagination = ({ page, handlePreviousPage, handleNextPage, nextPage }) => {
   return (

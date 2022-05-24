@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { createNewServer } from "../../services/services";
 import "./createServer.css";
 
 const CreateServer = ({
@@ -41,28 +39,20 @@ const CreateServer = ({
     }
   };
 
-  const createServer = async () => {
-    try {
-      await axios
-        .post("https://server-app-server.herokuapp.com/create", newServer)
-        .then(() => {
-          setUpdatedServersList(true);
-        })
-        .catch((error) => {
-          console.log("error 1");
-          setError(true);
-        });
-    } catch {
-      console.log("error 2");
-      setError(true);
-    }
+  const createAServer = async () => {
+    const abortController = new AbortController();
+    const createServer = await createNewServer(newServer, abortController);
+    console.log(createServer);
+    if (createServer) {
+      setUpdatedServersList(true);
+    } else setError(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(false);
     setUpdatedServersList(false);
-    createServer();
+    createAServer();
   };
 
   return (
@@ -71,7 +61,7 @@ const CreateServer = ({
         <h1 className="title">Create A Server</h1>
         <form onSubmit={handleSubmit} className="form">
           <label>
-            Name :
+            Name:
             <input
               className="name-input"
               type="text"
@@ -81,7 +71,7 @@ const CreateServer = ({
             />
           </label>
           <label>
-            IP address :
+            IP address:
             <input
               className="address-input"
               type="text"
@@ -91,7 +81,7 @@ const CreateServer = ({
             />
           </label>
           <label>
-            Choose type :
+            Choose type:
             <select
               id="type"
               name="type"

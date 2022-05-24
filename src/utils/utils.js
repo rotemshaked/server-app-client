@@ -6,10 +6,14 @@ export const slicedServersToShow = (array, page = 1) => {
 };
 
 export const newServersToAddToList = (oldServersList, newServersList) => {
-  const updatedList = newServersList.filter((newServer) => {
-    return !oldServersList.find((oldServer) => {
-      return oldServer._id === newServer._id;
+  let differentServers = [];
+  for (let i = 0; i < oldServersList.length; i++) {
+    const isNewServer = newServersList.find((newServer) => {
+      return newServer._id !== oldServersList[i]._id;
     });
-  });
-  return updatedList;
+    isNewServer
+      ? differentServers.push(isNewServer)
+      : differentServers.push(oldServersList[i]);
+  }
+  return differentServers;
 };

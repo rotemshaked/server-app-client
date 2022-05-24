@@ -3,7 +3,6 @@
   display: flex;
   justify-content: center;
   margin-top: 5%;
-  /* margin-bottom: 30%; */
 }
 .previous-btn,
 .next-btn {
@@ -20,16 +19,13 @@
   color: white;
 }
 .hidden-btn {
-  /* display: none; */
   color: transparent;
   background-color: transparent;
-  /* border: 1px solid blue; */
   margin: 0rem 2rem;
   padding: 0.8rem;
   border: none;
   width: auto;
 }
-
 .page {
   display: flex;
   font-size: 1.5rem;

@@ -3,7 +3,7 @@
     url("../../assets/servers-list-page.jpg");
   min-height: 95vh;
   background-size: cover;
-  background-repeat: no-repeat, repeat;
+  background-repeat: no-repeat;
   background-position: center;
   position: relative;
   display: flex;

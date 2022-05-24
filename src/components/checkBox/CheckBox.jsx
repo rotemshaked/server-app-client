@@ -6,7 +6,6 @@ const SearcCheckBox = ({
   selectedSearch,
   labelName,
   setSelectedSearchType,
-  setSelectedSearchPrice,
 }) => {
   return (
     <div className="check-box">
@@ -16,7 +15,6 @@ const SearcCheckBox = ({
         onClick={() => {
           setSelectedSearch(!selectedSearch);
           setSelectedSearchType(null);
-          setSelectedSearchPrice(null);
         }}
       ></input>
       <label className="check-box-label">{labelName}</label>
