@@ -7,7 +7,6 @@ import CreateServer from "./pages/create-server-page/createServer";
 import "./assets/styles.css";
 
 function App() {
-  const [serversList, setServersList] = useState([]);
   const [serversTypes, setServersTypes] = useState([]);
   const [conversionRates, setConversionRates] = useState([]);
   const [updatedServersList, setUpdatedServersList] = useState(false);
@@ -31,8 +30,6 @@ function App() {
           path="/servers"
           element={
             <ServersListPage
-              serversList={serversList}
-              setServersList={setServersList}
               serversTypes={serversTypes}
               setServersTypes={setServersTypes}
               updatedServersList={updatedServersList}

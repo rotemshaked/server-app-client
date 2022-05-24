@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Server from "../../components/server/server";
 import Loader from "../../components/loader/loader";
 import Pagination from "../../components/pagination/pagination";
@@ -9,12 +8,10 @@ import { faTrash, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import SearchDropDown from "../../components/searchDropDown/SearchDropDown";
 import SearcCheckBox from "../../components/checkBox/CheckBox";
 import { getServersService, getTypesService } from "../../services/services";
-import { slicedServersToShow, updateServersList } from "../../utils/utils";
+import { slicedServersToShow, newServersToAddToList } from "../../utils/utils";
 import "./serversList.css";
 
 const ServersListPage = ({
-  serversList,
-  setServersList,
   serversTypes,
   setServersTypes,
   updatedServersList,
@@ -23,13 +20,14 @@ const ServersListPage = ({
   currency,
   setCurrencyIsShown,
 }) => {
+  const [serversList, setServersList] = useState([]);
   const [page, setPage] = useState(1);
   const [nextPageServers, setNextPageServers] = useState([]);
   const [searchError, setSearchError] = useState(false);
   const [serverListToShowOnScreen, setServerListToShowOnScreen] = useState([]);
   const [sumChange, setSumChange] = useState(false);
-  const [selectedSearchPrice, setSelectedSearchPrice] = useState("");
-  const [selectedSearchType, setSelectedSearchType] = useState("");
+  const [selectedSearchPrice, setSelectedSearchPrice] = useState(null);
+  const [selectedSearchType, setSelectedSearchType] = useState(null);
   const [selectedSearch, setSelectedSearch] = useState(false);
   const [input, setInput] = useState("");
 
@@ -40,11 +38,11 @@ const ServersListPage = ({
     setServerListToShowOnScreen(servers.servers);
     setNextPageServers(servers.next);
     if (nextPageServers.length > 0) {
-      const newServers = updateServersList(
+      const newServersToAdd = newServersToAddToList(
         serversList,
         serversAndNextPageServers
       );
-      const updatedServers = [...serversList, ...newServers];
+      const updatedServers = [...serversList, ...newServersToAdd];
       setServersList([...updatedServers]);
     } else {
       setServersList(serversAndNextPageServers);
@@ -58,7 +56,9 @@ const ServersListPage = ({
   };
 
   const handleNextPage = () => {
-    setPage(page + 1);
+    if (nextPageServers.length > 0) {
+      setPage(page + 1);
+    }
   };
 
   const handlePreviousPage = () => {
@@ -69,36 +69,24 @@ const ServersListPage = ({
 
   const handleSearchInput = () => {
     let listToShowOnScreen = [];
-    serversList.filter((server) => {
-      if (
-        !listToShowOnScreen.find(
-          (serverList) => serverList._id === server.id
-        ) &&
-        server.name.toUpperCase().includes(input.toUpperCase())
-      ) {
-        console.log(slicedServersToShow(listToShowOnScreen), "lis");
-        listToShowOnScreen.push(server);
-      }
-      if (
-        !listToShowOnScreen.find(
-          (serverList) => serverList._id === server.id
-        ) &&
+    listToShowOnScreen = serversList.filter((server) => {
+      return (
+        server.name.toLowerCase().includes(input) ||
         server.ipAddress.includes(input)
-      ) {
-        listToShowOnScreen.push(server);
-      }
+      );
     });
+    console.log(listToShowOnScreen);
     return slicedServersToShow(listToShowOnScreen);
   };
 
   const handleTypeChange = (e) => {
-    setSelectedSearchPrice("");
+    setSelectedSearchPrice(null);
     setSelectedSearch(false);
     setSelectedSearchType(e.target.value);
   };
 
   const handlePriceChange = (e) => {
-    setSelectedSearchType("");
+    setSelectedSearchType(null);
     setSelectedSearch(false);
     setSelectedSearchPrice(e.target.value);
   };
@@ -188,33 +176,31 @@ const ServersListPage = ({
     setSearchError(false);
   }, [updatedServersList, sumChange, page, currency, selectedSearch]);
 
+  const getOptions = (fields, name) => {
+    return fields.map((field) => {
+      return (
+        <option value={field._id} key={field._id}>
+          {typeof field[name] === "number"
+            ? field[name] + "$ per minute"
+            : "Type - " + field[name].toUpperCase()}
+        </option>
+      );
+    });
+  };
   return (
     <div>
       <div className="servers-List-Page">
         <Search setInput={setInput} />
-        {/* {searchError && errorMessage()} */}
         <div className="search-filter-container">
           <SearchDropDown
             handleChange={handleTypeChange}
-            filterName="All Types"
-            options={serversTypes.map((type) => {
-              return (
-                <option value={type._id} key={type._id}>
-                  Type {type.name.toUpperCase()}
-                </option>
-              );
-            })}
+            selected="Servers Types"
+            options={getOptions(serversTypes, "name")}
           />
           <SearchDropDown
             handleChange={handlePriceChange}
-            filterName="Servers Prices"
-            options={serversTypes.map((type) => {
-              return (
-                <option value={type._id} key={type._id}>
-                  {type.pricePerMinute}$
-                </option>
-              );
-            })}
+            selected="Servers Prices"
+            options={getOptions(serversTypes, "pricePerMinute")}
           />
           <SearcCheckBox
             labelName="Running Servers"
@@ -231,26 +217,24 @@ const ServersListPage = ({
               <Loader />
             </div>
           ) : (
-            <div className="servers">
-              <table className="servers-table">
-                <tbody>
-                  <tr>
-                    <th>Name</th>
-                    <th>IP address</th>
-                    <th>Type</th>
-                    <th>Price per minute</th>
-                    <th>Server is running</th>
-                    <th>Sum to pay</th>
-                    <th> {<FontAwesomeIcon icon={faPlay} />}</th>
-                    <th>{<FontAwesomeIcon icon={faStop} />}</th>
-                    <th>
-                      <FontAwesomeIcon icon={faTrash} />
-                    </th>
-                  </tr>
-                  {serversToShow()}
-                </tbody>
-              </table>
-            </div>
+            <table className="servers-table">
+              <tbody>
+                <tr>
+                  <th>Name</th>
+                  <th>IP address</th>
+                  <th>Type</th>
+                  <th>Price per minute</th>
+                  <th>Server is running</th>
+                  <th>Sum to pay</th>
+                  <th> {<FontAwesomeIcon icon={faPlay} />}</th>
+                  <th>{<FontAwesomeIcon icon={faStop} />}</th>
+                  <th>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </th>
+                </tr>
+                {serversToShow()}
+              </tbody>
+            </table>
           )}
         </div>
         <Pagination

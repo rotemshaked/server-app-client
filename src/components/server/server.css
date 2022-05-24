@@ -4,36 +4,6 @@
   height: 3rem;
   text-indent: 0.5rem;
 }
-.server {
-  height: 28rem;
-  width: 20rem;
-  color: black;
-  margin: 1rem;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  border-radius: 0.5rem;
-}
-.name {
-  align-self: center;
-  margin: 1rem;
-  font-size: 1.9rem;
-}
-.type,
-.price,
-.address,
-.running,
-.sum {
-  margin: 0.5rem 1rem;
-  border-bottom: 2px solid white;
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.2rem;
-}
-.buttons-and-icon {
-  display: flex;
-  width: 100%;
-}
 .button-2 {
   cursor: pointer;
   background-color: transparent;

@@ -1,15 +1,14 @@
 import "./SearchDropDown.css";
 
-const SearchDropDown = ({ handleChange, filterName, options }) => {
+const SearchDropDown = ({ handleChange, selected, options }) => {
   return (
-    <div className="search-filter-div">
+    <div>
       <select
-        id="type"
         name="type"
         className="search-filter-select"
         onChange={handleChange}
       >
-        <option>{filterName}</option>
+        <option>{selected}</option>
         {options}
       </select>
     </div>

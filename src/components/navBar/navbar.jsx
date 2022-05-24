@@ -20,10 +20,6 @@ const Navbar = ({
     getCurrenciesRates();
   }, []);
 
-  const handleSelectedCurrency = async (e) => {
-    setCurrency(e.target.value);
-  };
-
   let currencies = Object.keys(conversionRates);
 
   return (
@@ -42,7 +38,7 @@ const Navbar = ({
           <div>Pick Currency &nbsp;&nbsp;</div>
           <div>
             <select
-              onChange={(e) => handleSelectedCurrency(e)}
+              onChange={(e) => setCurrency(e.target.value)}
               className="currency-pick"
             >
               {currencies.map((currency) => {

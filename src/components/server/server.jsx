@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   handleStartService,
   handleStopService,
@@ -84,7 +84,7 @@ const Server = ({
           onClick={() => handleDelete(server)}
           title="Delete"
         >
-          <FontAwesomeIcon icon={faTrash} className="icon-2" />
+          <FontAwesomeIcon icon={faTrash} />
         </button>
       </td>
     </tr>
