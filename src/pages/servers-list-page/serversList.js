@@ -23,13 +23,12 @@ const ServersListPage = ({
   const [serversList, setServersList] = useState([]);
   const [page, setPage] = useState(1);
   const [nextPageServers, setNextPageServers] = useState([]);
-  const [searchError, setSearchError] = useState(false);
   const [serverListToShowOnScreen, setServerListToShowOnScreen] = useState([]);
   const [sumChange, setSumChange] = useState(false);
   const [selectedSearchPrice, setSelectedSearchPrice] = useState(null);
   const [selectedSearchType, setSelectedSearchType] = useState(null);
   const [selectedSearch, setSelectedSearch] = useState(false);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(null);
 
   const getServers = async () => {
     const abortController = new AbortController();
@@ -67,18 +66,6 @@ const ServersListPage = ({
     }
   };
 
-  const handleSearchInput = () => {
-    let listToShowOnScreen = [];
-    listToShowOnScreen = serversList.filter((server) => {
-      return (
-        server.name.toLowerCase().includes(input) ||
-        server.ipAddress.includes(input)
-      );
-    });
-    console.log(listToShowOnScreen);
-    return slicedServersToShow(listToShowOnScreen);
-  };
-
   const handleTypeChange = (e) => {
     setSelectedSearchPrice(null);
     setSelectedSearch(false);
@@ -106,8 +93,29 @@ const ServersListPage = ({
 
   const showServersByCheckBox = () => {
     let listToShowOnScreen = [];
-    serversList.forEach((server) => {
-      if (server.isRunning === true) {
+    if (selectedSearch) {
+      serversList.forEach((server) => {
+        if (server.isRunning === true) {
+          listToShowOnScreen.push(server);
+        }
+      });
+    }
+    if (listToShowOnScreen.length > 0) {
+      return slicedServersToShow(listToShowOnScreen);
+    }
+    return false;
+  };
+
+  const handleSearchInput = () => {
+    let listToShowOnScreen = [];
+    serversList.filter((server) => {
+      if (input === "") {
+        return false;
+      } else if (
+        server.name.toLowerCase().includes(input) ||
+        server.ipAddress.includes(input)
+      ) {
+        console.log("server", server);
         listToShowOnScreen.push(server);
       }
     });
@@ -117,33 +125,24 @@ const ServersListPage = ({
     return false;
   };
 
-  const serversToMapToShowOnScreen = () => {
-    if (selectedSearchType) {
-      let servers = showServersBySelectedDropDown(selectedSearchType);
-      if (servers.length > 0) {
-        return servers;
-      }
-    } else if (selectedSearchPrice) {
-      let servers = showServersBySelectedDropDown(selectedSearchPrice);
-      if (servers.length > 0) {
-        return servers;
-      }
-    } else if (selectedSearch) {
-      let servers = showServersByCheckBox();
-      if (servers.length > 0) {
-        return servers;
-      }
-    } else if (input) {
-      let servers = handleSearchInput();
-      if (servers.length > 0) {
-        return servers;
-      }
-    }
-    return slicedServersToShow(serverListToShowOnScreen);
-  };
+  console.log(
+    showServersBySelectedDropDown(selectedSearchType),
+    "showServersBySelectedDropDown(selectedSearchType)"
+  );
 
   const serversToShow = () => {
-    const serversToMap = serversToMapToShowOnScreen();
+    const serversToMap =
+      showServersBySelectedDropDown(selectedSearchType) ||
+      showServersBySelectedDropDown(selectedSearchPrice) ||
+      showServersByCheckBox() ||
+      handleSearchInput() ||
+      slicedServersToShow(serverListToShowOnScreen);
+    // console.log(serversToMap, "***********");
+    // console.log(slicedServersToShow(serverListToShowOnScreen), "########");
+    // console.log(showServersByCheckBox(), "showServersByCheckBox()");
+    // console.log(handleSearchInput(), "handleSearchInput()");
+    // console.log(showServersBySelectedDropDown(selectedSearchPrice));
+    // console.log(showServersBySelectedDropDown(selectedSearchType));
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
@@ -173,7 +172,6 @@ const ServersListPage = ({
     serversToShow();
     setUpdatedServersList(false);
     setCurrencyIsShown(true);
-    setSearchError(false);
   }, [updatedServersList, sumChange, page, currency, selectedSearch]);
 
   const getOptions = (fields, name) => {
@@ -187,6 +185,7 @@ const ServersListPage = ({
       );
     });
   };
+
   return (
     <div>
       <div className="servers-List-Page">

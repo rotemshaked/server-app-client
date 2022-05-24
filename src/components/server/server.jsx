@@ -24,6 +24,7 @@ const Server = ({
     if (!server.isRunning) {
       await handleStartService(server, abortController);
       setSumChange(!sumChange);
+      // setUpdatedServersList(true);
     }
   };
 
