@@ -63,6 +63,7 @@ const ServersListPage = ({
 
   const handleTypeChange = (e) => {
     setSelectedSearch(false);
+    setPage(1);
     setSelectedSearchType(e.target.value);
   };
 
@@ -74,7 +75,8 @@ const ServersListPage = ({
       }
     });
     if (listToShowOnScreen.length > 0) {
-      return slicedServersToShow(listToShowOnScreen);
+      let serversToShow = slicedServersToShow(listToShowOnScreen, page);
+      return serversToShow;
     }
     return false;
   };
@@ -99,7 +101,8 @@ const ServersListPage = ({
       });
     }
     if (listToShowOnScreen.length > 0) {
-      return slicedServersToShow(listToShowOnScreen);
+      let serversToShow = slicedServersToShow(listToShowOnScreen, page);
+      return serversToShow;
     }
     return false;
   };
@@ -176,6 +179,7 @@ const ServersListPage = ({
             selectedSearch={selectedSearch}
             setSelectedSearch={setSelectedSearch}
             setSelectedSearchType={setSelectedSearchType}
+            setPage={setPage}
           />
         </div>
         <div className="serversContiner">
