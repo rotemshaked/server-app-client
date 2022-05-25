@@ -28,6 +28,7 @@ const ServersListPage = ({
   const [selectedSearchType, setSelectedSearchType] = useState(null);
   const [selectedSearch, setSelectedSearch] = useState(false);
   const [input, setInput] = useState(null);
+
   const getServers = async () => {
     const abortController = new AbortController();
     const servers = await getServersService(page, abortController);
@@ -41,25 +42,30 @@ const ServersListPage = ({
       setServersList([...updatedServers]);
     }
   };
+
   const getServersTypes = async () => {
     const abortController = new AbortController();
     const serversTypes = await getTypesService(abortController);
     setServersTypes(serversTypes);
   };
+
   const handleNextPage = () => {
     if (nextPageServers.length > 0) {
       setPage(page + 1);
     }
   };
+
   const handlePreviousPage = () => {
     if (page > 1) {
       setPage(page - 1);
     }
   };
+
   const handleTypeChange = (e) => {
     setSelectedSearch(false);
     setSelectedSearchType(e.target.value);
   };
+
   const showServersBySelectedDropDown = (selectedSearch) => {
     let listToShowOnScreen = [];
     serversList.forEach((server) => {
@@ -72,6 +78,7 @@ const ServersListPage = ({
     }
     return false;
   };
+
   const getOptions = (fields) => {
     return fields.map((field) => {
       return (
@@ -81,6 +88,7 @@ const ServersListPage = ({
       );
     });
   };
+
   const showServersByCheckBox = () => {
     let listToShowOnScreen = [];
     if (selectedSearch) {
@@ -95,6 +103,7 @@ const ServersListPage = ({
     }
     return false;
   };
+
   const handleSearchInput = () => {
     let listToShowOnScreen = [];
     serversList.filter((server) => {
@@ -112,6 +121,7 @@ const ServersListPage = ({
     }
     return false;
   };
+
   const serversToShow = () => {
     const serversToMap =
       showServersBySelectedDropDown(selectedSearchType) ||
@@ -142,6 +152,7 @@ const ServersListPage = ({
       }
     });
   };
+
   useEffect(() => {
     getServers();
     getServersTypes();
