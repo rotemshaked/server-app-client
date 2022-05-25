@@ -3,6 +3,7 @@ import {
   handleStopService,
   handleDeleteService,
 } from "../../services/services";
+import { updateServersList } from "../../utils/utils.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
@@ -17,12 +18,16 @@ const Server = ({
   setUpdatedServersList,
   setSumChange,
   sumChange,
+  setServersList,
+  serversList,
 }) => {
   const handleStart = async (server) => {
     const abortController = new AbortController();
     if (!server.isRunning) {
       await handleStartService(server, abortController);
       setSumChange(!sumChange);
+      const servers = updateServersList(serversList, server);
+      setServersList(servers);
     }
   };
 
@@ -31,6 +36,8 @@ const Server = ({
     if (server.isRunning) {
       await handleStopService(server, abortController);
       setSumChange(!sumChange);
+      const servers = updateServersList(serversList, server);
+      setServersList(servers);
     }
   };
 

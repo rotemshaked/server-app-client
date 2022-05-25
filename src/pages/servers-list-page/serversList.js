@@ -6,7 +6,7 @@ import Search from "../../components/search/serach";
 import SearchDropDown from "../../components/searchDropDown/SearchDropDown";
 import SearcCheckBox from "../../components/checkBox/CheckBox";
 import { getServersService, getTypesService } from "../../services/services";
-import { slicedServersToShow, newServersToAddToList } from "../../utils/utils";
+import { slicedServersToShow, updateNewServersList } from "../../utils/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import "./serversList.css";
@@ -28,48 +28,38 @@ const ServersListPage = ({
   const [selectedSearchType, setSelectedSearchType] = useState(null);
   const [selectedSearch, setSelectedSearch] = useState(false);
   const [input, setInput] = useState(null);
-
   const getServers = async () => {
     const abortController = new AbortController();
     const servers = await getServersService(page, abortController);
-    const serversAndNextPageServers = [...servers.servers, ...servers.next];
     setServerListToShowOnScreen(servers.servers);
     setNextPageServers(servers.next);
-    if (nextPageServers.length > 0) {
-      const newServersList = newServersToAddToList(
-        serversList,
-        serversAndNextPageServers
-      );
-      // const updatedServers = [...serversList, ...newServersToAdd];
-      setServersList([...newServersList]);
+    const updatedServers = [...servers.servers, ...servers.next];
+    if (serversList.length > 0) {
+      let servers = updateNewServersList(serversList, updatedServers);
+      setServersList([...serversList, ...servers]);
     } else {
-      setServersList(serversAndNextPageServers);
+      setServersList([...updatedServers]);
     }
   };
-
   const getServersTypes = async () => {
     const abortController = new AbortController();
     const serversTypes = await getTypesService(abortController);
     setServersTypes(serversTypes);
   };
-
   const handleNextPage = () => {
     if (nextPageServers.length > 0) {
       setPage(page + 1);
     }
   };
-
   const handlePreviousPage = () => {
     if (page > 1) {
       setPage(page - 1);
     }
   };
-
   const handleTypeChange = (e) => {
     setSelectedSearch(false);
     setSelectedSearchType(e.target.value);
   };
-
   const showServersBySelectedDropDown = (selectedSearch) => {
     let listToShowOnScreen = [];
     serversList.forEach((server) => {
@@ -82,7 +72,15 @@ const ServersListPage = ({
     }
     return false;
   };
-
+  const getOptions = (fields) => {
+    return fields.map((field) => {
+      return (
+        <option value={field._id} key={field._id}>
+          {`${field.name.toUpperCase()} - ${field.pricePerMinute}$ per minute`}
+        </option>
+      );
+    });
+  };
   const showServersByCheckBox = () => {
     let listToShowOnScreen = [];
     if (selectedSearch) {
@@ -97,7 +95,6 @@ const ServersListPage = ({
     }
     return false;
   };
-
   const handleSearchInput = () => {
     let listToShowOnScreen = [];
     serversList.filter((server) => {
@@ -121,12 +118,6 @@ const ServersListPage = ({
       showServersByCheckBox() ||
       handleSearchInput() ||
       slicedServersToShow(serverListToShowOnScreen);
-    // console.log(serversToMap, "***********");
-    // console.log(slicedServersToShow(serverListToShowOnScreen), "########");
-    // console.log(showServersByCheckBox(), "showServersByCheckBox()");
-    // console.log(handleSearchInput(), "handleSearchInput()");
-    // console.log(showServersBySelectedDropDown(selectedSearchPrice));
-    // console.log(showServersBySelectedDropDown(selectedSearchType));
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
@@ -142,6 +133,8 @@ const ServersListPage = ({
             setUpdatedServersList={setUpdatedServersList}
             setSumChange={setSumChange}
             sumChange={sumChange}
+            setServersList={setServersList}
+            serversList={serversList}
           />
         );
       } else {
@@ -149,7 +142,6 @@ const ServersListPage = ({
       }
     });
   };
-
   useEffect(() => {
     getServers();
     getServersTypes();
@@ -157,16 +149,6 @@ const ServersListPage = ({
     setUpdatedServersList(false);
     setCurrencyIsShown(true);
   }, [updatedServersList, sumChange, page, currency, selectedSearch]);
-
-  const getOptions = (fields) => {
-    return fields.map((field) => {
-      return (
-        <option value={field._id} key={field._id}>
-          {`${field.name.toUpperCase()} - ${field.pricePerMinute}$ per minute`}
-        </option>
-      );
-    });
-  };
 
   return (
     <div>

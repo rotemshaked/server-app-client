@@ -20,6 +20,25 @@ export const getServersService = async (page, abortController) => {
     abortController.abort();
   };
 };
+export const findServersService = async (input, abortController) => {
+  try {
+    const allServers = await axios.get(
+      "https://server-app-server.herokuapp.com/find",
+      { input: input, signal: abortController.signal }
+    );
+    return allServers.data;
+  } catch (error) {
+    if (error.name === "AbortError") {
+      console.log("aborted get servers request");
+    } else {
+      console.log("error in getting the servers from server");
+    }
+  }
+  return () => {
+    console.log("aborted get servers request");
+    abortController.abort();
+  };
+};
 
 export const getTypesService = async (abortController) => {
   try {
