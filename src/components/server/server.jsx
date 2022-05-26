@@ -49,7 +49,6 @@ const Server = ({
     );
     if (deletedSuccessfully) setUpdatedServersList(true);
   };
-  console.log(server);
   return (
     <tr key={server._id} className="tr-servers">
       <td>{server.name}</td>

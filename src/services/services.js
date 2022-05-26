@@ -155,7 +155,7 @@ export const getCurrencies = async (abortController) => {
 
 export const createNewServer = async (newServer, abortController) => {
   try {
-    console.log(newServer, "newServer");
+    // console.log(newServer, "newServer");
     const createServer = await axios.post(
       "https://server-app-server.herokuapp.com/create",
       {
