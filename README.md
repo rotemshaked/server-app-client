@@ -6,7 +6,7 @@ Create, play, stop, delete and watch how much you have to pay for using the serv
 
 Nelify link:
 
-[https://zippy-concha-9d0e55.netlify.app]
+https://zippy-concha-9d0e55.netlify.app
 
 Languages:
 
