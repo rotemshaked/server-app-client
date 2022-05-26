@@ -49,12 +49,16 @@ const Server = ({
     );
     if (deletedSuccessfully) setUpdatedServersList(true);
   };
-
+  console.log(server);
   return (
     <tr key={server._id} className="tr-servers">
       <td>{server.name}</td>
       <td>{server.ipAddress}</td>
-      <td>{serverType.name.toUpperCase()}</td>
+      <td>
+        {typeof serverType.name === "string"
+          ? serverType.name.toUpperCase()
+          : serverType.name}
+      </td>
       <td>{`${serverType.pricePerMinute}$`}</td>
       <td>
         {server.isRunning ? (
