@@ -124,14 +124,13 @@ const ServersListPage = ({
     }
     return false;
   };
-  // console.log(serversList);
+
   const serversToShow = () => {
     const serversToMap =
       showServersBySelectedDropDown(selectedSearchType) ||
       showServersByCheckBox() ||
       handleSearchInput() ||
-      slicedServersToShow(serversList, page);
-    console.log(slicedServersToShow(serversList, page));
+      slicedServersToShow(serverListToShowOnScreen);
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;

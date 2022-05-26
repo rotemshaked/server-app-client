@@ -9,8 +9,8 @@ const CreateServer = ({
   setCurrencyIsShown,
 }) => {
   const [newServer, setNewServer] = useState({
-    name: " ",
-    ipAddress: " ",
+    ipAddress: "",
+    name: "",
     typeId: "",
   });
   const [error, setError] = useState(false);
