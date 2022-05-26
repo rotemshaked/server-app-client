@@ -42,7 +42,6 @@ const CreateServer = ({
   const createAServer = async () => {
     const abortController = new AbortController();
     const createServer = await createNewServer(newServer, abortController);
-    console.log(createServer);
     if (createServer) {
       setUpdatedServersList(true);
     } else setError(true);
