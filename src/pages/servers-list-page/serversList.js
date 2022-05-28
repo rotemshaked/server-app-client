@@ -32,13 +32,13 @@ const ServersListPage = ({
   const getServers = async () => {
     const abortController = new AbortController();
     const servers = await getServersService(page, abortController);
-    setServerListToShowOnScreen(servers.servers);
-    setNextPageServers(servers.next);
     const updatedServers = [...servers.servers, ...servers.next];
+    setNextPageServers(servers.next);
     if (serversList.length > 0) {
-      let servers = updateNewServersList(serversList, updatedServers);
-      setServersList([...serversList, ...servers]);
+      let updatedList = updateNewServersList(serversList, updatedServers);
+      setServersList([...serversList, ...updatedList]);
     } else {
+      setServerListToShowOnScreen(servers.servers);
       setServersList([...updatedServers]);
     }
   };
@@ -52,12 +52,19 @@ const ServersListPage = ({
   const handleNextPage = () => {
     if (nextPageServers.length > 0) {
       setPage(page + 1);
+      setServerListToShowOnScreen(nextPageServers);
     }
   };
 
   const handlePreviousPage = () => {
     if (page > 1) {
       setPage(page - 1);
+      let updatedServersToShowOnScreen = slicedServersToShow(
+        serversList,
+        page - 1
+      );
+      setServerListToShowOnScreen(updatedServersToShowOnScreen);
+      // setNextPageServers(serversList, page - 1);
     }
   };
 
@@ -136,6 +143,14 @@ const ServersListPage = ({
         return type._id === server.type;
       });
       if (!server.deleted) {
+        // console.log(server._id, "not deleted");
+        // console.log(server, "not deleted");
+        // console.log(typeId, "not deleted");
+        // console.log(conversionRates, "not deleted");
+        // console.log(currency, "not deleted");
+        // console.log(setUpdatedServersList, "not deleted");
+        // console.log(sumChange, "not deleted");
+        // console.log(serversList, "not deleted");
         return (
           <Server
             key={server._id}

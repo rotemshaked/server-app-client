@@ -53,11 +53,7 @@ const Server = ({
     <tr key={server._id} className="tr-servers">
       <td>{server.name}</td>
       <td>{server.ipAddress}</td>
-      <td>
-        {typeof serverType.name === "string"
-          ? serverType.name.toUpperCase()
-          : serverType.name}
-      </td>
+      <td>{serverType.name.toUpperCase()}</td>
       <td>{`${serverType.pricePerMinute}$`}</td>
       <td>
         {server.isRunning ? (
