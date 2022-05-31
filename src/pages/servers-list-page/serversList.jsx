@@ -27,7 +27,8 @@ const ServersListPage = ({
   const [selectedSearchType, setSelectedSearchType] = useState(null);
   const [selectedSearch, setSelectedSearch] = useState(false);
   const [input, setInput] = useState(null);
-  const showNextPageButton = useRef(true);
+  let showNextPageButton = true;
+  let serversNotFound = useRef(false);
 
   const getServers = async () => {
     const abortController = new AbortController();
@@ -40,11 +41,6 @@ const ServersListPage = ({
       setServersList([...serversList, ...updatedList]);
     } else {
       setServersList([...updatedServers]);
-    }
-    if (servers.next.length > 0) {
-      showNextPageButton.current = true;
-    } else {
-      showNextPageButton.current = false;
     }
   };
 
@@ -85,23 +81,27 @@ const ServersListPage = ({
       let serversToShow = slicedServersToShow(listToShowOnScreen, page);
       let serversInNextPage = slicedServersToShow(listToShowOnScreen, page + 1);
       if (serversInNextPage.length > 0) {
-        showNextPageButton.current = true;
+        showNextPageButton = true;
       } else {
-        showNextPageButton.current = false;
+        showNextPageButton = false;
       }
       return serversToShow;
+    } else {
+      serversNotFound.current = true;
     }
-    return false;
   };
 
   const showServersBySelectedDropDown = (selectedSearchType) => {
-    let listToShowOnScreen = [];
-    serversList.forEach((server) => {
-      if (selectedSearchType === server.type) {
-        listToShowOnScreen.push(server);
-      }
-    });
-    return showServersBySelected(listToShowOnScreen);
+    if (selectedSearchType !== null && selectedSearchType !== "default") {
+      let listToShowOnScreen = [];
+      serversList.forEach((server) => {
+        if (selectedSearchType === server.type) {
+          listToShowOnScreen.push(server);
+        }
+      });
+      return showServersBySelected(listToShowOnScreen);
+    }
+    return false;
   };
 
   const showServersByCheckBox = () => {
@@ -112,23 +112,36 @@ const ServersListPage = ({
           listToShowOnScreen.push(server);
         }
       });
+      return showServersBySelected(listToShowOnScreen);
+    } else {
+      serversNotFound.current = false;
     }
-    return showServersBySelected(listToShowOnScreen);
+  };
+  const handleSearchInput = () => {
+    if (input) {
+      let listToShowOnScreen = [];
+      serversList.filter((server) => {
+        if (input === "") {
+          serversNotFound.current = false;
+          return false;
+        } else if (
+          server.name.toLowerCase().includes(input) ||
+          server.ipAddress.includes(input)
+        ) {
+          listToShowOnScreen.push(server);
+        }
+      });
+      return showServersBySelected(listToShowOnScreen);
+    }
   };
 
-  const handleSearchInput = () => {
-    let listToShowOnScreen = [];
-    serversList.filter((server) => {
-      if (input === "") {
-        return false;
-      } else if (
-        server.name.toLowerCase().includes(input) ||
-        server.ipAddress.includes(input)
-      ) {
-        listToShowOnScreen.push(server);
-      }
-    });
-    return showServersBySelected(listToShowOnScreen);
+  const serversToShowOnTheScreen = () => {
+    if (nextPageServers.length > 0) {
+      showNextPageButton = true;
+    } else {
+      showNextPageButton = false;
+    }
+    return slicedServersToShow(serverListToShowOnScreen);
   };
 
   const serversToShow = () => {
@@ -136,7 +149,7 @@ const ServersListPage = ({
       showServersBySelectedDropDown(selectedSearchType) ||
       showServersByCheckBox() ||
       handleSearchInput() ||
-      slicedServersToShow(serverListToShowOnScreen);
+      serversToShowOnTheScreen();
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
@@ -161,13 +174,15 @@ const ServersListPage = ({
       }
     });
   };
-
   useEffect(() => {
     getServers();
     serversToShow();
     setUpdatedServersList(false);
     setCurrencyIsShown(true);
+    // serversNotFound.current = false;
   }, [updatedServersList, sumChange, page, currency, selectedSearch]);
+
+  console.log(serversNotFound);
 
   return (
     <div>
@@ -186,6 +201,13 @@ const ServersListPage = ({
             setSelectedSearchType={setSelectedSearchType}
             setPage={setPage}
           />
+        </div>
+        <div
+          className={
+            serversNotFound.current ? "error-finding-server" : "hidden"
+          }
+        >
+          No server matching the requirement was found :&#40;
         </div>
         <div className="serversContiner">
           {!serversList.length > 0 || !(serversTypes.length > 0) ? (

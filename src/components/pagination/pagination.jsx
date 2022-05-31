@@ -8,9 +8,7 @@ const Pagination = ({
   page,
   handlePreviousPage,
   handleNextPage,
-  nextPage,
 }) => {
-  console.log(showNextPageButton.current);
   return (
     <div className="pagination">
       <button
@@ -23,7 +21,7 @@ const Pagination = ({
       <div className="page"> - Page {page} -</div>
       <button
         onClick={handleNextPage}
-        className={showNextPageButton.current ? "next-btn" : "hidden-btn"}
+        className={showNextPageButton ? "next-btn" : "hidden-btn"}
       >
         Next &nbsp;
         <FontAwesomeIcon icon={faArrowRight} />

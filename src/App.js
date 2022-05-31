@@ -23,6 +23,7 @@ function App() {
   useEffect(() => {
     getServersTypes();
   }, []);
+
   return (
     <BrowserRouter>
       <Navbar
