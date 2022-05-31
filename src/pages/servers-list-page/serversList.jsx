@@ -5,7 +5,7 @@ import Pagination from "../../components/pagination/pagination";
 import Search from "../../components/search/serach";
 import SearchDropDown from "../../components/searchDropDown/SearchDropDown";
 import SearcCheckBox from "../../components/checkBox/CheckBox";
-import { getServersService, getTypesService } from "../../services/services";
+import { getServersService } from "../../services/services";
 import { slicedServersToShow, updateNewServersList } from "../../utils/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
@@ -13,7 +13,6 @@ import "./serversList.css";
 
 const ServersListPage = ({
   serversTypes,
-  setServersTypes,
   updatedServersList,
   setUpdatedServersList,
   conversionRates,
@@ -42,15 +41,11 @@ const ServersListPage = ({
     } else {
       setServersList([...updatedServers]);
     }
-    if (!servers.next.length > 0) {
+    if (servers.next.length > 0) {
+      showNextPageButton.current = true;
+    } else {
       showNextPageButton.current = false;
     }
-  };
-
-  const getServersTypes = async () => {
-    const abortController = new AbortController();
-    const serversTypes = await getTypesService(abortController);
-    setServersTypes(serversTypes);
   };
 
   const handleTypeChange = (e) => {
@@ -96,34 +91,24 @@ const ServersListPage = ({
       }
       return serversToShow;
     }
-    // if (listToShowOnScreen.length === 0) {
-    //   showNextPageButton.current = true;
-    // }
     return false;
   };
 
   const showServersBySelectedDropDown = (selectedSearchType) => {
     let listToShowOnScreen = [];
-    if (selectedSearchType === "default") {
-      showNextPageButton.current = true;
-    }
     serversList.forEach((server) => {
       if (selectedSearchType === server.type) {
         listToShowOnScreen.push(server);
       }
     });
-    // console.log(serversList);
     return showServersBySelected(listToShowOnScreen);
   };
-  console.log(serversList);
 
   const showServersByCheckBox = () => {
     let listToShowOnScreen = [];
     if (selectedSearch) {
       serversList.forEach((server) => {
-        // console.log(server);
         if (server.isRunning === true) {
-          // console.log(server, "true");
           listToShowOnScreen.push(server);
         }
       });
@@ -179,11 +164,9 @@ const ServersListPage = ({
 
   useEffect(() => {
     getServers();
-    getServersTypes();
     serversToShow();
     setUpdatedServersList(false);
     setCurrencyIsShown(true);
-    showNextPageButton.current = true;
   }, [updatedServersList, sumChange, page, currency, selectedSearch]);
 
   return (

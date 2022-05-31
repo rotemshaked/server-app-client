@@ -10,6 +10,7 @@ const Pagination = ({
   handleNextPage,
   nextPage,
 }) => {
+  console.log(showNextPageButton.current);
   return (
     <div className="pagination">
       <button

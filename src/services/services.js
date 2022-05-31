@@ -138,7 +138,7 @@ export const createNewServer = async (newServer) => {
   try {
     console.log(newServer);
     const createServer = await axios.post(
-      "https://server-app-server.herokuapp.com/servers",
+      "https://server-app-server.herokuapp.com/create",
       newServer
     );
     return createServer;

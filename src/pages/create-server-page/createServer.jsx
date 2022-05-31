@@ -41,6 +41,7 @@ const CreateServer = ({
 
   const createAServer = async () => {
     const createServer = await createNewServer(newServer);
+    console.log(createServer);
     if (createServer) {
       setUpdatedServersList(true);
     } else setError(true);
@@ -49,7 +50,6 @@ const CreateServer = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(false);
-    setUpdatedServersList(false);
     createAServer();
   };
 

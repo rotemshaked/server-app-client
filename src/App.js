@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/navBar/navbar";
 import Home from "./pages/home-page/home";
 import ServersListPage from "./pages/servers-list-page/serversList";
 import CreateServer from "./pages/create-server-page/createServer";
+import { getTypesService } from "./services/services";
 import "./assets/styles.css";
 
 function App() {
@@ -13,6 +14,15 @@ function App() {
   const [currency, setCurrency] = useState("USD");
   const [currencyIsShown, setCurrencyIsShown] = useState(false);
 
+  const getServersTypes = async () => {
+    const abortController = new AbortController();
+    const serversTypes = await getTypesService(abortController);
+    setServersTypes(serversTypes);
+  };
+
+  useEffect(() => {
+    getServersTypes();
+  }, []);
   return (
     <BrowserRouter>
       <Navbar
