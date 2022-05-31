@@ -20,25 +20,6 @@ export const getServersService = async (page, abortController) => {
     abortController.abort();
   };
 };
-export const findServersService = async (input, abortController) => {
-  try {
-    const allServers = await axios.get(
-      "https://server-app-server.herokuapp.com/find",
-      { input: input, signal: abortController.signal }
-    );
-    return allServers.data;
-  } catch (error) {
-    if (error.name === "AbortError") {
-      console.log("aborted get servers request");
-    } else {
-      console.log("error in getting the servers from server");
-    }
-  }
-  return () => {
-    console.log("aborted get servers request");
-    abortController.abort();
-  };
-};
 
 export const getTypesService = async (abortController) => {
   try {
@@ -86,14 +67,14 @@ export const handleDeleteService = async (server, abortController) => {
 export const handleStartService = async (server, abortController) => {
   try {
     if (!server.isRunning) {
-      const start = await axios.put(
+      const updatedServer = await axios.put(
         "https://server-app-server.herokuapp.com/servers",
         {
           _id: server._id,
           signal: abortController.signal,
         }
       );
-      return start;
+      return updatedServer.data;
     }
   } catch (error) {
     if (error.name === "AbortError") {
@@ -111,14 +92,14 @@ export const handleStartService = async (server, abortController) => {
 export const handleStopService = async (server, abortController) => {
   try {
     if (server.isRunning) {
-      const stop = await axios.put(
+      const updatedServer = await axios.put(
         "https://server-app-server.herokuapp.com/servers",
         {
           _id: server._id,
           signal: abortController.signal,
         }
       );
-      return stop;
+      return updatedServer.data;
     }
   } catch (error) {
     if (error.name === "AbortError") {

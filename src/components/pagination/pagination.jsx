@@ -3,7 +3,13 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "./pagination.css";
 
-const Pagination = ({ page, handlePreviousPage, handleNextPage, nextPage }) => {
+const Pagination = ({
+  showNextPageButton,
+  page,
+  handlePreviousPage,
+  handleNextPage,
+  nextPage,
+}) => {
   return (
     <div className="pagination">
       <button
@@ -16,7 +22,7 @@ const Pagination = ({ page, handlePreviousPage, handleNextPage, nextPage }) => {
       <div className="page"> - Page {page} -</div>
       <button
         onClick={handleNextPage}
-        className={nextPage.length > 0 ? "next-btn" : "hidden-btn"}
+        className={showNextPageButton.current ? "next-btn" : "hidden-btn"}
       >
         Next &nbsp;
         <FontAwesomeIcon icon={faArrowRight} />

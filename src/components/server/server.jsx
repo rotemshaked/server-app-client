@@ -24,9 +24,9 @@ const Server = ({
   const handleStart = async (server) => {
     const abortController = new AbortController();
     if (!server.isRunning) {
-      await handleStartService(server, abortController);
+      const updatedServer = await handleStartService(server, abortController);
+      const servers = updateServersList(serversList, updatedServer);
       setSumChange(!sumChange);
-      const servers = updateServersList(serversList, server);
       setServersList(servers);
     }
   };
@@ -34,21 +34,23 @@ const Server = ({
   const handleStop = async (server) => {
     const abortController = new AbortController();
     if (server.isRunning) {
-      await handleStopService(server, abortController);
+      const updatedServer = await handleStopService(server, abortController);
+      const servers = updateServersList(serversList, updatedServer);
       setSumChange(!sumChange);
-      const servers = updateServersList(serversList, server);
       setServersList(servers);
     }
   };
 
   const handleDelete = async (server) => {
     const abortController = new AbortController();
-    const deletedSuccessfully = await handleDeleteService(
-      server,
-      abortController
-    );
-    if (deletedSuccessfully) setUpdatedServersList(true);
+    if (!server.isRunning) {
+      const updatedServer = await handleDeleteService(server, abortController);
+      const servers = updateServersList(serversList, updatedServer.data);
+      setUpdatedServersList(true);
+      setServersList(servers);
+    }
   };
+
   return (
     <tr key={server._id} className="tr-servers">
       <td>{server.name}</td>

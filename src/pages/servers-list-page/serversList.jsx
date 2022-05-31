@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Server from "../../components/server/server";
 import Loader from "../../components/loader/loader";
 import Pagination from "../../components/pagination/pagination";
@@ -28,18 +28,22 @@ const ServersListPage = ({
   const [selectedSearchType, setSelectedSearchType] = useState(null);
   const [selectedSearch, setSelectedSearch] = useState(false);
   const [input, setInput] = useState(null);
+  const showNextPageButton = useRef(true);
 
   const getServers = async () => {
     const abortController = new AbortController();
     const servers = await getServersService(page, abortController);
     const updatedServers = [...servers.servers, ...servers.next];
     setNextPageServers(servers.next);
+    setServerListToShowOnScreen(servers.servers);
     if (serversList.length > 0) {
       let updatedList = updateNewServersList(serversList, updatedServers);
       setServersList([...serversList, ...updatedList]);
     } else {
-      setServerListToShowOnScreen(servers.servers);
       setServersList([...updatedServers]);
+    }
+    if (!servers.next.length > 0) {
+      showNextPageButton.current = false;
     }
   };
 
@@ -47,6 +51,12 @@ const ServersListPage = ({
     const abortController = new AbortController();
     const serversTypes = await getTypesService(abortController);
     setServersTypes(serversTypes);
+  };
+
+  const handleTypeChange = (e) => {
+    setSelectedSearch(false);
+    setPage(1);
+    setSelectedSearchType(e.target.value);
   };
 
   const handleNextPage = () => {
@@ -59,59 +69,66 @@ const ServersListPage = ({
   const handlePreviousPage = () => {
     if (page > 1) {
       setPage(page - 1);
-      let updatedServersToShowOnScreen = slicedServersToShow(
-        serversList,
-        page - 1
-      );
-      setServerListToShowOnScreen(updatedServersToShowOnScreen);
-      // setNextPageServers(serversList, page - 1);
+      setServerListToShowOnScreen(slicedServersToShow(serversList, page - 1));
     }
   };
 
-  const handleTypeChange = (e) => {
-    setSelectedSearch(false);
-    setPage(1);
-    setSelectedSearchType(e.target.value);
-  };
-
-  const showServersBySelectedDropDown = (selectedSearch) => {
-    let listToShowOnScreen = [];
-    serversList.forEach((server) => {
-      if (server.type === selectedSearch) {
-        listToShowOnScreen.push(server);
-      }
-    });
-    if (listToShowOnScreen.length > 0) {
-      let serversToShow = slicedServersToShow(listToShowOnScreen, page);
-      return serversToShow;
-    }
-    return false;
-  };
-
-  const getOptions = (fields) => {
-    return fields.map((field) => {
+  const getOptions = (serversTypes) => {
+    return serversTypes.map((serversType) => {
       return (
-        <option value={field._id} key={field._id}>
-          {`${field.name.toUpperCase()} - ${field.pricePerMinute}$ per minute`}
+        <option value={serversType._id} key={serversType._id}>
+          {`${serversType.name.toUpperCase()} - ${
+            serversType.pricePerMinute
+          }$ per minute`}
         </option>
       );
     });
   };
 
+  const showServersBySelected = (listToShowOnScreen) => {
+    if (listToShowOnScreen.length > 0) {
+      let serversToShow = slicedServersToShow(listToShowOnScreen, page);
+      let serversInNextPage = slicedServersToShow(listToShowOnScreen, page + 1);
+      if (serversInNextPage.length > 0) {
+        showNextPageButton.current = true;
+      } else {
+        showNextPageButton.current = false;
+      }
+      return serversToShow;
+    }
+    // if (listToShowOnScreen.length === 0) {
+    //   showNextPageButton.current = true;
+    // }
+    return false;
+  };
+
+  const showServersBySelectedDropDown = (selectedSearchType) => {
+    let listToShowOnScreen = [];
+    if (selectedSearchType === "default") {
+      showNextPageButton.current = true;
+    }
+    serversList.forEach((server) => {
+      if (selectedSearchType === server.type) {
+        listToShowOnScreen.push(server);
+      }
+    });
+    // console.log(serversList);
+    return showServersBySelected(listToShowOnScreen);
+  };
+  console.log(serversList);
+
   const showServersByCheckBox = () => {
     let listToShowOnScreen = [];
     if (selectedSearch) {
       serversList.forEach((server) => {
+        // console.log(server);
         if (server.isRunning === true) {
+          // console.log(server, "true");
           listToShowOnScreen.push(server);
         }
       });
     }
-    if (listToShowOnScreen.length > 0) {
-      let serversToShow = slicedServersToShow(listToShowOnScreen, page);
-      return serversToShow;
-    }
-    return false;
+    return showServersBySelected(listToShowOnScreen);
   };
 
   const handleSearchInput = () => {
@@ -126,10 +143,7 @@ const ServersListPage = ({
         listToShowOnScreen.push(server);
       }
     });
-    if (listToShowOnScreen.length > 0) {
-      return slicedServersToShow(listToShowOnScreen);
-    }
-    return false;
+    return showServersBySelected(listToShowOnScreen);
   };
 
   const serversToShow = () => {
@@ -143,14 +157,6 @@ const ServersListPage = ({
         return type._id === server.type;
       });
       if (!server.deleted) {
-        // console.log(server._id, "not deleted");
-        // console.log(server, "not deleted");
-        // console.log(typeId, "not deleted");
-        // console.log(conversionRates, "not deleted");
-        // console.log(currency, "not deleted");
-        // console.log(setUpdatedServersList, "not deleted");
-        // console.log(sumChange, "not deleted");
-        // console.log(serversList, "not deleted");
         return (
           <Server
             key={server._id}
@@ -177,6 +183,7 @@ const ServersListPage = ({
     serversToShow();
     setUpdatedServersList(false);
     setCurrencyIsShown(true);
+    showNextPageButton.current = true;
   }, [updatedServersList, sumChange, page, currency, selectedSearch]);
 
   return (
@@ -187,7 +194,7 @@ const ServersListPage = ({
           <SearchDropDown
             handleChange={handleTypeChange}
             selected="Servers Types"
-            options={getOptions(serversTypes, "name")}
+            options={getOptions(serversTypes)}
           />
           <SearcCheckBox
             labelName="Running Servers"
@@ -225,6 +232,7 @@ const ServersListPage = ({
           )}
         </div>
         <Pagination
+          showNextPageButton={showNextPageButton}
           page={page}
           handlePreviousPage={handlePreviousPage}
           handleNextPage={handleNextPage}

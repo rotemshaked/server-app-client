@@ -8,7 +8,7 @@ const SearchDropDown = ({ handleChange, selected, options }) => {
         className="search-filter-select"
         onChange={handleChange}
       >
-        <option>{selected}</option>
+        <option value="default">{selected}</option>
         {options}
       </select>
     </div>
