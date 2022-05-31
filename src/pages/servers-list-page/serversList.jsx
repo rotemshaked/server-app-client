@@ -122,7 +122,6 @@ const ServersListPage = ({
       let listToShowOnScreen = [];
       serversList.filter((server) => {
         if (input === "") {
-          serversNotFound.current = false;
           return false;
         } else if (
           server.name.toLowerCase().includes(input) ||
@@ -132,6 +131,8 @@ const ServersListPage = ({
         }
       });
       return showServersBySelected(listToShowOnScreen);
+    } else {
+      serversNotFound.current = false;
     }
   };
 
@@ -181,8 +182,6 @@ const ServersListPage = ({
     setCurrencyIsShown(true);
     // serversNotFound.current = false;
   }, [updatedServersList, sumChange, page, currency, selectedSearch]);
-
-  console.log(serversNotFound);
 
   return (
     <div>
