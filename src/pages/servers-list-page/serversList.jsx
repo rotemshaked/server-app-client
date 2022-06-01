@@ -85,7 +85,6 @@ const ServersListPage = ({
       } else {
         showNextPageButton = false;
       }
-      console.log("inside input return");
       return serversToShow;
     } else {
       serversNotFound.current = true;
@@ -155,9 +154,6 @@ const ServersListPage = ({
       showServersByCheckBox() ||
       handleSearchInput() ||
       serversToShowOnTheScreen();
-    console.log(handleSearchInput(), "servers map");
-    console.log(serversNotFound.current, "out");
-
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
