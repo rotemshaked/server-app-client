@@ -27,8 +27,8 @@ const ServersListPage = ({
   const [selectedSearchType, setSelectedSearchType] = useState(null);
   const [selectedSearch, setSelectedSearch] = useState(false);
   const [input, setInput] = useState(null);
-  let showNextPageButton = true;
   let serversNotFound = useRef(false);
+  let showNextPageButton = true;
 
   const getServers = async () => {
     const abortController = new AbortController();
@@ -88,11 +88,13 @@ const ServersListPage = ({
       return serversToShow;
     } else {
       serversNotFound.current = true;
+      return slicedServersToShow(serversList);
     }
   };
 
   const showServersBySelectedDropDown = (selectedSearchType) => {
     if (selectedSearchType !== null && selectedSearchType !== "default") {
+      serversNotFound.current = false;
       let listToShowOnScreen = [];
       serversList.forEach((server) => {
         if (selectedSearchType === server.type) {
@@ -105,22 +107,21 @@ const ServersListPage = ({
   };
 
   const showServersByCheckBox = () => {
-    let listToShowOnScreen = [];
     if (selectedSearch) {
+      serversNotFound.current = false;
+      let listToShowOnScreen = [];
       serversList.forEach((server) => {
         if (server.isRunning === true) {
           listToShowOnScreen.push(server);
         }
       });
       return showServersBySelected(listToShowOnScreen);
-    } else {
-      serversNotFound.current = false;
     }
+    return false;
   };
 
   const handleSearchInput = () => {
     if (input) {
-      console.log("input");
       let listToShowOnScreen = [];
       serversList.filter((server) => {
         if (input === "") {
@@ -133,13 +134,12 @@ const ServersListPage = ({
         }
       });
       return showServersBySelected(listToShowOnScreen);
-    } else {
-      console.log("not");
-      serversNotFound.current = false;
     }
+    return false;
   };
 
   const serversToShowOnTheScreen = () => {
+    serversNotFound.current = false;
     if (nextPageServers.length > 0) {
       showNextPageButton = true;
     } else {
@@ -154,6 +154,9 @@ const ServersListPage = ({
       showServersByCheckBox() ||
       handleSearchInput() ||
       serversToShowOnTheScreen();
+    console.log(handleSearchInput(), "servers map");
+    console.log(serversNotFound.current, "out");
+
     return serversToMap.map((server) => {
       let typeId = serversTypes.find((type) => {
         return type._id === server.type;
