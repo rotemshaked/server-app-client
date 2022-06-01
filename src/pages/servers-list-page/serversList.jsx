@@ -85,6 +85,7 @@ const ServersListPage = ({
       } else {
         showNextPageButton = false;
       }
+      console.log("inside input return");
       return serversToShow;
     } else {
       serversNotFound.current = true;
