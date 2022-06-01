@@ -187,7 +187,7 @@ const ServersListPage = ({
     serversToShow();
     setUpdatedServersList(false);
     setCurrencyIsShown(true);
-  }, [updatedServersList, sumChange, page, currency, selectedSearch]);
+  }, [updatedServersList, sumChange, page, currency, selectedSearch, input]);
 
   return (
     <div>
