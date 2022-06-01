@@ -117,8 +117,10 @@ const ServersListPage = ({
       serversNotFound.current = false;
     }
   };
+
   const handleSearchInput = () => {
     if (input) {
+      console.log("input");
       let listToShowOnScreen = [];
       serversList.filter((server) => {
         if (input === "") {
@@ -132,6 +134,7 @@ const ServersListPage = ({
       });
       return showServersBySelected(listToShowOnScreen);
     } else {
+      console.log("not");
       serversNotFound.current = false;
     }
   };
@@ -180,7 +183,6 @@ const ServersListPage = ({
     serversToShow();
     setUpdatedServersList(false);
     setCurrencyIsShown(true);
-    // serversNotFound.current = false;
   }, [updatedServersList, sumChange, page, currency, selectedSearch]);
 
   return (
